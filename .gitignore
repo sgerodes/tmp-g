@@ -1,0 +1,5 @@
+target/
+.idea
+tmp/
+_localdev/tmp/*
+_localdev/parachain-configs*

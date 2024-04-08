@@ -249,6 +249,73 @@ impl pallet_sudo::Config for Runtime {
 	type WeightInfo = pallet_sudo::weights::SubstrateWeight<Runtime>;
 }
 
+
+parameter_types! {
+    pub const BasicDeposit: Balance = 10 ;
+    pub const FieldDeposit: Balance = 250 ;
+    pub const PendingUsernameExpiration: BlockNumber = 7 * DAYS;
+    pub const MaxSuffixLength: u32 = 30;
+    pub const MaxUsernameLength: u32 = 50;
+}
+
+impl pallet_identity::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type BasicDeposit = BasicDeposit;
+	type ByteDeposit = FieldDeposit;
+	type SubAccountDeposit = ConstU128<1000>;
+	type MaxSubAccounts = ConstU32<100>;
+	type IdentityInformation = IdentityInfo<ConstU32<100>>;
+	type MaxRegistrars = ConstU32<20>;
+	type Slashed = ();
+	// type Slashed = Treasury;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type RegistrarOrigin = EnsureRoot<AccountId>;
+	type OffchainSignature = MultiSignature;
+	type SigningPublicKey = AccountPublic;
+	type UsernameAuthorityOrigin = EnsureRoot<AccountId>;
+	type PendingUsernameExpiration = PendingUsernameExpiration;
+	type MaxSuffixLength = MaxSuffixLength;
+	type MaxUsernameLength = ConstU32<50>;
+	type WeightInfo = pallet_identity::weights::SubstrateWeight<Runtime>;
+
+}
+//
+// parameter_types! {
+// 	pub const CouncilMotionDuration: BlockNumber = 30 * MINUTES;
+// 	pub const CouncilMaxProposals: u32 = 100;
+// 	pub const CouncilMaxMembers: u32 = 100;
+//     pub MaxCollectivesProposalWeight: Weight = Perbill::from_percent(50) * RuntimeBlockWeights::get().get(DispatchClass::Normal).max_total.unwrap_or(Weight::MAX);
+// }
+//
+// impl pallet_collective::Config for Runtime {
+// 	type RuntimeOrigin = RuntimeOrigin;
+// 	type Proposal = RuntimeCall;
+// 	type RuntimeEvent = RuntimeEvent;
+// 	type MotionDuration = CouncilMotionDuration;
+// 	type MaxProposals = CouncilMaxProposals;
+// 	type MaxMembers = CouncilMaxMembers;
+// 	type DefaultVote = pallet_collective::PrimeDefaultVote;
+// 	type WeightInfo = pallet_collective::weights::SubstrateWeight<Runtime>;
+// 	type SetMembersOrigin = EnsureRoot<Self::AccountId>;
+// 	type MaxProposalWeight = MaxCollectivesProposalWeight;
+// }
+//
+// impl pallet_membership::Config for Runtime {
+// 	type RuntimeEvent = RuntimeEvent;
+// 	type AddOrigin = EnsureRoot<AccountId>;
+// 	type RemoveOrigin = EnsureRoot<AccountId>;
+// 	type SwapOrigin = EnsureRoot<AccountId>;
+// 	type ResetOrigin = EnsureRoot<AccountId>;
+// 	type PrimeOrigin = EnsureRoot<AccountId>;
+// 	type MembershipInitialized = Collective;
+// 	type MembershipChanged = Collective;
+// 	type MaxMembers = CouncilMaxMembers;
+// 	type WeightInfo = pallet_membership::weights::SubstrateWeight<Runtime>;
+// }
+//
+
+
 /// Configure the pallet-template in pallets/template.
 impl pallet_template::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -267,6 +334,10 @@ construct_runtime!(
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.
 		TemplateModule: pallet_template,
+
+		Identity: pallet_identity,
+		// Collective: pallet_collective,
+		// Membership: pallet_membership,
 	}
 );
 

@@ -24,51 +24,51 @@ clap = { version = "4.4.18", features = ["derive"] }
 futures = { version = "0.3.21", features = ["thread-pool"] }
 serde_json = "1.0.111"
 
-sc-cli = { path = "../../../client/cli" }
-sp-core = { path = "../../../primitives/core" }
-sc-executor = { path = "../../../client/executor" }
-sc-network = { path = "../../../client/network" }
-sc-service = { path = "../../../client/service" }
-sc-telemetry = { path = "../../../client/telemetry" }
-sc-transaction-pool = { path = "../../../client/transaction-pool" }
-sc-transaction-pool-api = { path = "../../../client/transaction-pool/api" }
-sc-offchain = { path = "../../../client/offchain" }
-sc-consensus-aura = { path = "../../../client/consensus/aura" }
-sp-consensus-aura = { path = "../../../primitives/consensus/aura" }
-sc-consensus = { path = "../../../client/consensus/common" }
-sc-consensus-grandpa = { path = "../../../client/consensus/grandpa" }
-sp-consensus-grandpa = { path = "../../../primitives/consensus/grandpa" }
-sc-client-api = { path = "../../../client/api" }
-sp-runtime = { path = "../../../primitives/runtime" }
-sp-io = { path = "../../../primitives/io" }
-sp-timestamp = { path = "../../../primitives/timestamp" }
-sp-inherents = { path = "../../../primitives/inherents" }
-sp-keyring = { path = "../../../primitives/keyring" }
-frame-system = { path = "../../../frame/system" }
-pallet-transaction-payment = { path = "../../../frame/transaction-payment", default-features = false }
+sc-cli = { workspace = true }
+sp-core = { workspace = true }
+sc-executor = { workspace = true }
+sc-network = { workspace = true }
+sc-service = { workspace = true }
+sc-telemetry = { workspace = true }
+sc-transaction-pool = { workspace = true }
+sc-transaction-pool-api = { workspace = true }
+sc-offchain = { workspace = true }
+sc-consensus-aura = { workspace = true }
+sp-consensus-aura = { workspace = true }
+sc-consensus = { workspace = true }
+sc-consensus-grandpa = { workspace = true }
+sp-consensus-grandpa = { workspace = true }
+sc-client-api = { workspace = true }
+sp-runtime = { workspace = true }
+sp-io = { workspace = true }
+sp-timestamp = { workspace = true }
+sp-inherents = { workspace = true }
+sp-keyring = { workspace = true }
+frame-system = { workspace = true }
+pallet-transaction-payment = { workspace = true, default-features = false }
 
 # These dependencies are used for the node template's RPCs
 jsonrpsee = { version = "0.20.3", features = ["server"] }
-sp-api = { path = "../../../primitives/api" }
-sc-rpc-api = { path = "../../../client/rpc-api" }
-sp-blockchain = { path = "../../../primitives/blockchain" }
-sp-block-builder = { path = "../../../primitives/block-builder" }
-sc-basic-authorship = { path = "../../../client/basic-authorship" }
-substrate-frame-rpc-system = { path = "../../../utils/frame/rpc/system" }
-pallet-transaction-payment-rpc = { path = "../../../frame/transaction-payment/rpc" }
+sp-api = { workspace = true }
+sc-rpc-api = { workspace = true }
+sp-blockchain = { workspace = true }
+sp-block-builder = { workspace = true }
+sc-basic-authorship = { workspace = true }
+substrate-frame-rpc-system = { workspace = true }
+pallet-transaction-payment-rpc = { workspace = true }
 
 # These dependencies are used for runtime benchmarking
-frame-benchmarking = { path = "../../../frame/benchmarking" }
-frame-benchmarking-cli = { path = "../../../utils/frame/benchmarking-cli" }
+frame-benchmarking = { workspace = true }
+frame-benchmarking-cli = { workspace = true }
 
 # Local Dependencies
-node-template-runtime = { path = "../runtime" }
+node-template-runtime = { workspace = true }
 
 # CLI-specific dependencies
-try-runtime-cli = { path = "../../../utils/frame/try-runtime/cli", optional = true }
+try-runtime-cli = { workspace = true, optional = true }
 
 [build-dependencies]
-substrate-build-script-utils = { path = "../../../utils/build-script-utils" }
+substrate-build-script-utils = { workspace = true }
 
 [features]
 default = []

@@ -25,6 +25,8 @@ frame-support = { workspace = true, default-features = false }
 pallet-grandpa = { workspace = true, default-features = false }
 pallet-sudo = { workspace = true, default-features = false }
 pallet-identity = { workspace = true, default-features = false }
+pallet-membership = { workspace = true, default-features = false }
+pallet-collective = { workspace = true, default-features = false }
 frame-system = { workspace = true, default-features = false }
 frame-try-runtime = { workspace = true, default-features = false, optional = true }
 pallet-timestamp = { workspace = true, default-features = false }
@@ -75,6 +77,8 @@ std = [
 	"pallet-balances/std",
 	"pallet-grandpa/std",
 	"pallet-identity/std",
+	'pallet-collective/std',
+	"pallet-membership/std",
 	"pallet-sudo/std",
 	"pallet-template/std",
 	"pallet-timestamp/std",

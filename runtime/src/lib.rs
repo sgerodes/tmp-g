@@ -10,6 +10,8 @@ use pallet_grandpa::AuthorityId as GrandpaId;
 use sp_api::impl_runtime_apis;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
+use frame_system::EnsureRoot;
+use pallet_identity::legacy::IdentityInfo;
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
 	traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, NumberFor, One, Verify},
@@ -272,7 +274,7 @@ impl pallet_identity::Config for Runtime {
 	type ForceOrigin = EnsureRoot<AccountId>;
 	type RegistrarOrigin = EnsureRoot<AccountId>;
 	type OffchainSignature = MultiSignature;
-	type SigningPublicKey = AccountPublic;
+	type SigningPublicKey = <Signature as sp_runtime::traits::Verify>::Signer;
 	type UsernameAuthorityOrigin = EnsureRoot<AccountId>;
 	type PendingUsernameExpiration = PendingUsernameExpiration;
 	type MaxSuffixLength = MaxSuffixLength;
@@ -313,7 +315,7 @@ impl pallet_identity::Config for Runtime {
 // 	type MaxMembers = CouncilMaxMembers;
 // 	type WeightInfo = pallet_membership::weights::SubstrateWeight<Runtime>;
 // }
-//
+
 
 
 /// Configure the pallet-template in pallets/template.

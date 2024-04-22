@@ -1,13 +1,18 @@
 [package]
-name = "node-template"
-version = "4.0.0-dev"
-description = "A fresh FRAME-based Substrate node, ready for hacking."
-authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
-homepage = "https://substrate.io/"
+#name = "node-template"
+name = "g6-solo-node"
+#version = "4.0.0-dev"
+#description = "A fresh FRAME-based Substrate node, ready for hacking."
+version = "0.1.0"
+description = "A FRAME-based Substrate G6 Solo Chain node."
+authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
+#homepage = "https://substrate.io/"
+homepage = "https://g6.network/"
 edition.workspace = true
-license = "MIT-0"
+#license = "MIT-0"
+license = "XXX"                # TODO There is no SPDX abbreviation for "all rights reserved" proprietary license!
 publish = false
-repository = "https://github.com/substrate-developer-hub/substrate-node-template/"
+repository = "https://g.g6.network/g6-chain/solo-chain"
 build = "build.rs"
 
 [lints]
@@ -17,7 +22,8 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [[bin]]
-name = "node-template"
+#name = "node-template"
+name = "g6-solo-node"
 
 [dependencies]
 clap = { version = "4.4.18", features = ["derive"] }

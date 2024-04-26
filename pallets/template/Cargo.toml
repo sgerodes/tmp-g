@@ -1,13 +1,17 @@
 [package]
-name = "pallet-template"
-version = "4.0.0-dev"
-description = "FRAME pallet template for defining custom runtime logic."
-authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
-homepage = "https://substrate.io"
+#name = "pallet-template"
+name = "g6-solo-pallet"
+#version = "4.0.0-dev"
+#description = "FRAME pallet template for defining custom runtime logic."
+version = "0.1.0"
+description = "G6 Solo Chain FRAME pallets with custom runtime logic."
+authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
+#homepage = "https://substrate.io/"
+homepage = "https://g6.network/"
 edition.workspace = true
-license = "MIT-0"
+license = "XXX"                # TODO There is no SPDX abbreviation for "all rights reserved" proprietary license!
 publish = false
-repository = "https://github.com/substrate-developer-hub/substrate-node-template/"
+repository = "https://g.g6.network/g6-chain/solo-chain"
 
 [lints]
 workspace = true

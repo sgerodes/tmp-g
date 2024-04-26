@@ -1,13 +1,17 @@
 [package]
-name = "node-template-runtime"
-version = "4.0.0-dev"
-description = "A fresh FRAME-based Substrate node, ready for hacking."
-authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
-homepage = "https://substrate.io/"
+#name = "node-template-runtime"
+name = "g6-solo-runtime"
+#version = "4.0.0-dev"
+#description = "A fresh FRAME-based Substrate node, ready for hacking."
+version = "0.1.0"
+description = "The G6 Solochain Runtime"
+authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
+#homepage = "https://substrate.io/"
+homepage = "https://g6.network/"
 edition.workspace = true
-license = "MIT-0"
+license = "XXX"    # TODO find an appropriate license and change it
 publish = false
-repository = "https://github.com/substrate-developer-hub/substrate-node-template/"
+repository = "https://g.g6.network/g6-chain/solo-chain"
 
 [lints]
 workspace = true
@@ -24,6 +28,9 @@ pallet-balances = { workspace = true, default-features = false }
 frame-support = { workspace = true, default-features = false }
 pallet-grandpa = { workspace = true, default-features = false }
 pallet-sudo = { workspace = true, default-features = false }
+pallet-identity = { workspace = true, default-features = false }
+pallet-membership = { workspace = true, default-features = false }
+pallet-collective = { workspace = true, default-features = false }
 frame-system = { workspace = true, default-features = false }
 frame-try-runtime = { workspace = true, default-features = false, optional = true }
 pallet-timestamp = { workspace = true, default-features = false }
@@ -73,6 +80,9 @@ std = [
 	"pallet-aura/std",
 	"pallet-balances/std",
 	"pallet-grandpa/std",
+	"pallet-identity/std",
+	'pallet-collective/std',
+	"pallet-membership/std",
 	"pallet-sudo/std",
 	"pallet-template/std",
 	"pallet-timestamp/std",

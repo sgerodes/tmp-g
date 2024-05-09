@@ -1,0 +1,6 @@
+1. typo in the runtime descriptions
+    Is:
+        in runtime description is stated
+        description = "A fresh FRAME-based Substrate node, ready for hacking."
+    Should:
+        Should not state "node"

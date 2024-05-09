@@ -4,3 +4,4 @@ tmp/
 ./tmp*
 _localdev/tmp/*
 _localdev/parachain-configs*
+tmp*

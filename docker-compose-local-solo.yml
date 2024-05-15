@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  node_alice:
+    ports:
+      - "30333:30333"
+      - "9933:9933"
+      - "9944:9944"
+      - "9615:9615"
+    image: solo-chain-run
+    volumes:
+      - "polkadot-data-alice:/data"
+    environment:
+      WHO: alice
+      CHAIN: local
+      NODE_KEY: "0000000000000000000000000000000000000000000000000000000000000001"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.1
+
+  node_bob:
+    ports:
+      - "30344:30333"
+      - "9935:9933"
+      - "9945:9944"
+      - "29615:9615"
+    image: solo-chain-run
+    volumes:
+      - "polkadot-data-bob:/data"
+    environment:
+      WHO: bob
+      CHAIN: local
+      NODE_KEY: "0000000000000000000000000000000000000000000000000000000000000002"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.2
+
+volumes:
+  polkadot-data-alice:
+  polkadot-data-bob:
+
+networks:
+  testing_net:
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

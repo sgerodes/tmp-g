@@ -17,32 +17,27 @@ RUN apt-get update && \
 WORKDIR /workspace
 ENV PATH=$HOME/.cargo/bin:$PATH
 
-RUN echo "alias ll='ls -la'" >> $HOME/.bashrc
-RUN echo "alias ..='cd ..'" >> $HOME/.bashrc
-RUN echo "alias ...='cd ../..'" >> $HOME/.bashrc
+RUN echo "alias ll='ls -la'" >> $HOME/.bashrc && \
+    echo "alias ..='cd ..'" >> $HOME/.bashrc && \
+    echo "alias ...='cd ../..'" >> $HOME/.bashrc
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 
 # Source cargo environment directly in the Dockerfile
 ENV PATH="/root/.cargo/bin:${PATH}"
-
 RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
-RUN cat $HOME/.bashrc
-RUN echo $HOME
-RUN which rustup
 
-# Update rust toolchains
-RUN rustup default stable
-RUN rustup update
-
-# Install the wasm target
-RUN rustup update nightly
-RUN rustup target add wasm32-unknown-unknown --toolchain stable-x86_64-unknown-linux-gnu
-RUN rustup component add rust-src
-RUN rustup component add clippy
-
-RUN cargo install cargo-audit
+# Update rust toolchains and install targets and components
+RUN rustup default stable && \
+    rustup update && \
+    rustup update nightly && \
+    rustup target add wasm32-unknown-unknown --toolchain stable-x86_64-unknown-linux-gnu && \
+    rustup component add rust-src && \
+    rustup component add clippy && \
+    cargo install cargo-audit
 
 COPY . .
 
-RUN cargo build --release
+# Use a local target directory to avoid cross-device link error
+RUN cargo build --release --target-dir /workspace/target
+

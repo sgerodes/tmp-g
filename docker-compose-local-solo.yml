@@ -13,9 +13,9 @@ services:
       WHO: alice
       CHAIN: local
       NODE_KEY: "0000000000000000000000000000000000000000000000000000000000000001"
-    networks:
-      testing_net:
-        ipv4_address: 172.28.1.1
+#    networks:
+#      testing_net:
+#        ipv4_address: 172.28.1.1
 
   node_bob:
     ports:
@@ -30,16 +30,16 @@ services:
       WHO: bob
       CHAIN: local
       NODE_KEY: "0000000000000000000000000000000000000000000000000000000000000002"
-    networks:
-      testing_net:
-        ipv4_address: 172.28.1.2
+#    networks:
+#      testing_net:
+#        ipv4_address: 172.28.1.2
 
 volumes:
   polkadot-data-alice:
   polkadot-data-bob:
 
-networks:
-  testing_net:
-    ipam:
-      config:
-        - subnet: 172.28.0.0/16
+#networks:
+#  testing_net:
+#    ipam:
+#      config:
+#        - subnet: 172.28.0.0/16

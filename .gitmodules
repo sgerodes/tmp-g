@@ -1,0 +1,3 @@
+[submodule "docker_g6"]
+	path = docker_g6
+	url = ssh://git@g.g6.network:2222/g6-chain/docker_g6.git

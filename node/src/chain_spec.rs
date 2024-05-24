@@ -4,12 +4,20 @@ use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_consensus_grandpa::AuthorityId as GrandpaId;
 use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
+use sc_service::Properties;
+
 
 // The URL for the telemetry server.
 // const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
 
+const TOKEN_SYMBOL: &str = "GSXP";
+const TOKEN_DECIMALS: u8 = 18;
+const SS58FORMAT: usize = 6666;
+const GENESIS_SUPPLY: u128 = 80_000_000;
+
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 pub type ChainSpec = sc_service::GenericChainSpec<RuntimeGenesisConfig>;
+
 
 /// Generate a crypto pair from seed.
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -33,7 +41,17 @@ pub fn authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
 	(get_from_seed::<AuraId>(s), get_from_seed::<GrandpaId>(s))
 }
 
+fn build_default_chain_properties() -> Properties {
+	let mut properties = Properties::new();
+	properties.insert("tokenSymbol".into(), TOKEN_SYMBOL.into());
+	properties.insert("tokenDecimals".into(), TOKEN_DECIMALS.into());
+	properties.insert("ss58Format".into(), SS58FORMAT.into());
+	properties
+}
+
 pub fn development_config() -> Result<ChainSpec, String> {
+	let properties = build_default_chain_properties();
+
 	Ok(ChainSpec::builder(
 		WASM_BINARY.ok_or_else(|| "Development wasm not available".to_string())?,
 		None,
@@ -55,18 +73,20 @@ pub fn development_config() -> Result<ChainSpec, String> {
 		],
 		true,
 	))
+	.with_properties(properties)
 	.build())
 }
 
+
 pub fn local_testnet_config() -> Result<ChainSpec, String> {
+	let properties = build_default_chain_properties();
+
 	Ok(ChainSpec::builder(
 		WASM_BINARY.ok_or_else(|| "Development wasm not available".to_string())?,
 		None,
 	)
-	// .with_name("Local Testnet")
-	// .with_id("local_testnet")
-	.with_name("G6 Solo Testnet")
-	.with_id("g6_solo_testnet")
+	.with_name("G6 Solo Chain")
+	.with_id("g6_solo_chain")
 	.with_chain_type(ChainType::Local)
 	.with_genesis_config_patch(testnet_genesis(
 		// Initial PoA authorities
@@ -90,6 +110,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 		],
 		true,
 	))
+	.with_properties(properties)
 	.build())
 }
 
@@ -100,10 +121,11 @@ fn testnet_genesis(
 	endowed_accounts: Vec<AccountId>,
 	_enable_println: bool,
 ) -> serde_json::Value {
+	let initial_balance: u128 = GENESIS_SUPPLY * 10u128.pow(TOKEN_DECIMALS.into());
+
 	serde_json::json!({
 		"balances": {
-			// Configure endowed accounts with initial balance of 1 << 60.
-			"balances": endowed_accounts.iter().cloned().map(|k| (k, 1u64 << 60)).collect::<Vec<_>>(),
+			"balances": endowed_accounts.iter().cloned().map(|k| (k, initial_balance)).collect::<Vec<_>>(),
 		},
 		"aura": {
 			"authorities": initial_authorities.iter().map(|x| (x.0.clone())).collect::<Vec<_>>(),

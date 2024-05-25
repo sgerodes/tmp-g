@@ -12,7 +12,7 @@ use sc_service::Properties;
 
 const TOKEN_SYMBOL: &str = "GSXP";
 const TOKEN_DECIMALS: u8 = 18;
-const SS58FORMAT: usize = 6666;
+const SS58FORMAT: usize = 355;
 const GENESIS_SUPPLY: u128 = 80_000_000;
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.

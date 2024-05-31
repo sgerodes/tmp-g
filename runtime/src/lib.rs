@@ -283,6 +283,48 @@ impl pallet_identity::Config for Runtime {
     type MaxUsernameLength = ConstU32<50>;
     type WeightInfo = pallet_identity::weights::SubstrateWeight<Runtime>;
 }
+
+parameter_types! {
+    pub const CouncilMotionDuration: BlockNumber = DAYS * 7;
+    pub const CouncilMaxProposals: u32 = 50;
+    pub const CouncilMaxMembers: u32 = 10;
+    pub const MaxCollectivesProposalWeight: Weight = Weight::from_parts(Perbill::from_percent(50).deconstruct() as u64, 0);
+}
+
+type CouncilCollective = pallet_collective::Instance1;
+impl pallet_collective::Config<pallet_collective::Instance1> for Runtime {
+    type RuntimeOrigin = RuntimeOrigin;
+    type Proposal = RuntimeCall;
+    type RuntimeEvent = RuntimeEvent;
+    type MotionDuration = CouncilMotionDuration;
+    type MaxProposals = CouncilMaxProposals;
+    type MaxMembers = CouncilMaxMembers;
+    type DefaultVote = pallet_collective::MoreThanMajorityThenPrimeDefaultVote;
+    type WeightInfo = pallet_collective::weights::SubstrateWeight<Runtime>;
+    type SetMembersOrigin = EnsureRoot<Self::AccountId>;
+    type MaxProposalWeight = MaxCollectivesProposalWeight;
+}
+
+
+construct_runtime!(
+    pub enum Runtime {
+        System: frame_system,
+        Timestamp: pallet_timestamp,
+        Aura: pallet_aura,
+        Grandpa: pallet_grandpa,
+        Balances: pallet_balances,
+        TransactionPayment: pallet_transaction_payment,
+        Sudo: pallet_sudo,
+        Identity: pallet_identity,
+        // https://github.com/paritytech/polkadot-sdk/blob/6ed020037f4c2b6a6b542be6e5a15e86b0b7587b/substrate/frame/support/src/instances.rs#L88
+        // https://github.com/Qrucial/QRUCIAL-DAO/blob/main/qdao-node/runtime/src/lib.rs#L308
+        Collective: pallet_collective::<Instance1>,
+        // Treasury: pallet_treasury,
+        // Membership: pallet_membership,
+    }
+);
+
+
 //
 // parameter_types! {
 // 	pub const ProposalBond: Permill = Permill::from_percent(5);
@@ -371,27 +413,6 @@ impl pallet_identity::Config for Runtime {
 // 	type SubmitOrigin = EnsureSigned<AccountId>;
 // }
 //
-//
-// parameter_types! {
-//     pub const CouncilMotionDuration: BlockNumber = DAYS * 7;
-//     pub const CouncilMaxProposals: u32 = 50;
-//     pub const CouncilMaxMembers: u32 = 10;
-//     pub MaxCollectivesProposalWeight: Weight = Perbill::from_percent(50);
-// }
-// // type ChallengeCollective = pallet_collective::Instance1;
-// // impl pallet_collective::Config<ChallengeCollective> for Runtime {
-// impl pallet_collective::Config for Runtime {
-//     type RuntimeOrigin = RuntimeOrigin;
-//     type Proposal = RuntimeCall;
-//     type RuntimeEvent = RuntimeEvent;
-//     type MotionDuration = CouncilMotionDuration;
-//     type MaxProposals = CouncilMaxProposals;
-//     type MaxMembers = CouncilMaxMembers;
-//     type DefaultVote = pallet_collective::MoreThanMajorityThenPrimeDefaultVote;
-//     type WeightInfo = pallet_collective::weights::SubstrateWeight<Runtime>;
-//     type SetMembersOrigin = EnsureRoot<Self::AccountId>;
-//     type MaxProposalWeight = MaxCollectivesProposalWeight;
-// }
 
 // impl pallet_membership::Config for Runtime {
 // 	type RuntimeEvent = RuntimeEvent;
@@ -405,25 +426,6 @@ impl pallet_identity::Config for Runtime {
 // 	type MaxMembers = CouncilMaxMembers;
 // 	type WeightInfo = pallet_membership::weights::SubstrateWeight<Runtime>;
 // }
-
-// Create the runtime by composing the FRAME pallets that were previously configured.
-construct_runtime!(
-    pub enum Runtime {
-        System: frame_system,
-        Timestamp: pallet_timestamp,
-        Aura: pallet_aura,
-        Grandpa: pallet_grandpa,
-        Balances: pallet_balances,
-        TransactionPayment: pallet_transaction_payment,
-        Sudo: pallet_sudo,
-        Identity: pallet_identity,
-        // Treasury: pallet_treasury,
-        // https://github.com/paritytech/polkadot-sdk/blob/6ed020037f4c2b6a6b542be6e5a15e86b0b7587b/substrate/frame/support/src/instances.rs#L88
-        // https://github.com/Qrucial/QRUCIAL-DAO/blob/main/qdao-node/runtime/src/lib.rs#L308
-        // Collective: pallet_collective::<Instance1>,
-        // Membership: pallet_membership,
-    }
-);
 
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, ()>;

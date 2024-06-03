@@ -310,6 +310,20 @@ impl pallet_collective::Config<CouncilCollective> for Runtime {
     type MaxProposalWeight = MaxCollectivesProposalWeight;
 }
 
+
+impl pallet_membership::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type AddOrigin = EnsureRoot<AccountId>;
+    type RemoveOrigin = EnsureRoot<AccountId>;
+    type SwapOrigin = EnsureRoot<AccountId>;
+    type ResetOrigin = EnsureRoot<AccountId>;
+    type PrimeOrigin = EnsureRoot<AccountId>;
+    type MembershipInitialized = Collective;
+    type MembershipChanged = Collective;
+    type MaxMembers = CouncilMaxMembers;
+    type WeightInfo = pallet_membership::weights::SubstrateWeight<Runtime>;
+}
+
 // parameter_types! {
 //     pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
 //     pub const ProposalBond: Permill = Permill::from_percent(5);
@@ -409,8 +423,8 @@ construct_runtime!(
         Sudo: pallet_sudo,
         Identity: pallet_identity,
         Collective: pallet_collective::<Instance1>,
+        Membership: pallet_membership,
         // Treasury: pallet_treasury,
-        // Membership: pallet_membership,
     }
 );
 

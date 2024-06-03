@@ -65,6 +65,7 @@ frame-system-benchmarking = { workspace = true, default-features = false, option
 pallet-template = { workspace = true, default-features = false }
 pallet-democracy = { workspace = true, default-features = false }
 pallet-treasury = { workspace = true, default-features = false }
+pallet-scheduler = { workspace = true, default-features = false }
 #pallet-nfts = { workspace = true, default-features = false }
 
 [build-dependencies]

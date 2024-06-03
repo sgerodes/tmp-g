@@ -2882,6 +2882,7 @@ dependencies = [
  "pallet-identity",
  "pallet-membership",
  "pallet-preimage",
+ "pallet-scheduler",
  "pallet-sudo",
  "pallet-template",
  "pallet-timestamp",
@@ -5210,6 +5211,23 @@ dependencies = [
  "sp-io 30.0.0",
  "sp-runtime 31.0.1",
  "sp-std 14.0.0 (git+https://github.com/paritytech/polkadot-sdk.git?branch=release-polkadot-v1.7.0)",
+]
+
+[[package]]
+name = "pallet-scheduler"
+version = "29.0.0"
+source = "git+https://github.com/paritytech/polkadot-sdk.git?branch=release-polkadot-v1.7.0#6ee8d7065dcc0db44e60eb7f70d4ca5a4904f4ec"
+dependencies = [
+ "docify",
+ "frame-support 28.0.0",
+ "frame-system 28.0.0",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io 30.0.0",
+ "sp-runtime 31.0.1",
+ "sp-std 14.0.0 (git+https://github.com/paritytech/polkadot-sdk.git?branch=release-polkadot-v1.7.0)",
+ "sp-weights 27.0.0",
 ]
 
 [[package]]
@@ -8274,7 +8292,7 @@ dependencies = [
 [[package]]
 name = "sp-crypto-ec-utils"
 version = "0.10.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "ark-bls12-377",
  "ark-bls12-377-ext",
@@ -8372,7 +8390,7 @@ dependencies = [
 [[package]]
 name = "sp-debug-derive"
 version = "14.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -8393,7 +8411,7 @@ dependencies = [
 [[package]]
 name = "sp-externalities"
 version = "0.25.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "environmental",
  "parity-scale-codec",
@@ -8703,7 +8721,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface"
 version = "24.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "bytes",
  "impl-trait-for-tuples",
@@ -8755,7 +8773,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface-proc-macro"
 version = "17.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "Inflector",
  "expander",
@@ -8903,7 +8921,7 @@ source = "git+https://github.com/paritytech/polkadot-sdk.git?branch=release-polk
 [[package]]
 name = "sp-std"
 version = "14.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 
 [[package]]
 name = "sp-storage"
@@ -8921,7 +8939,7 @@ dependencies = [
 [[package]]
 name = "sp-storage"
 version = "19.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "impl-serde",
  "parity-scale-codec",
@@ -8971,7 +8989,7 @@ dependencies = [
 [[package]]
 name = "sp-tracing"
 version = "16.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "parity-scale-codec",
  "tracing",
@@ -9137,7 +9155,7 @@ dependencies = [
 [[package]]
 name = "sp-wasm-interface"
 version = "20.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#73ac7375a5421bbc142bef232ab23d221ead64c2"
+source = "git+https://github.com/paritytech/polkadot-sdk#6f228e7d220bb14c113dcc27c931590737f9d0ab"
 dependencies = [
  "impl-trait-for-tuples",
  "log",

@@ -2106,16 +2106,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "feeless-transactions"
-version = "0.1.0"
-dependencies = [
- "frame-support 28.0.0",
- "frame-system 28.0.0",
- "parity-scale-codec",
- "scale-info",
-]
-
-[[package]]
 name = "ff"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4953,6 +4943,16 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std 14.0.0 (git+https://github.com/paritytech/polkadot-sdk.git?branch=release-polkadot-v1.7.0)",
+]
+
+[[package]]
+name = "pallet-feeless"
+version = "0.1.0"
+dependencies = [
+ "frame-support 28.0.0",
+ "frame-system 28.0.0",
+ "parity-scale-codec",
+ "scale-info",
 ]
 
 [[package]]

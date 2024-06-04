@@ -51,7 +51,7 @@ sp-transaction-pool = { workspace = true, default-features = false }
 sp-version = { workspace = true, default-features = false, features = ["serde"] }
 serde_json = { version = "1.0.111", default-features = false, features = ["alloc"] }
 sp-genesis-builder = { default-features = false, workspace = true }
-pallet-preimage = { workspace = true }
+pallet-preimage = { workspace = true, default-features = false }
 
 # Used for the node template's RPCs
 frame-system-rpc-runtime-api = { workspace = true, default-features = false }
@@ -88,6 +88,7 @@ std = [
 	"pallet-identity/std",
 	'pallet-collective/std',
 	"pallet-membership/std",
+	"pallet-democracy/std",
 	"pallet-sudo/std",
 	"pallet-template/std",
 	"pallet-timestamp/std",

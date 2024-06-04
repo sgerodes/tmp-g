@@ -35,7 +35,7 @@ pallet-treasury = { workspace = true, default-features = false }
 pallet-preimage = { workspace = true, default-features = false }
 pallet-scheduler = { workspace = true, default-features = false }
 pallet-bounties = { workspace = true, default-features = false }
-#pallet-nfts = { workspace = true, default-features = false }
+pallet-nfts = { workspace = true, default-features = false }
 pallet-collective = { workspace = true, default-features = false }
 frame-system = { workspace = true, default-features = false }
 frame-try-runtime = { workspace = true, default-features = false, optional = true }
@@ -94,6 +94,7 @@ std = [
     "pallet-preimage/std",
     "pallet-bounties/std",
     "pallet-treasury/std",
+    "pallet-nfts/std",
     "pallet-sudo/std",
     "pallet-template/std",
     "pallet-timestamp/std",

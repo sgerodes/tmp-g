@@ -369,58 +369,6 @@ impl pallet_scheduler::Config for Runtime {
     type Preimages = Preimage;
 }
 
-//
-// parameter_types! {
-//     pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
-//     pub const ProposalBond: Permill = Permill::from_percent(5);
-//     pub const ProposalBondMinimum: Balance = AVL;
-//     pub const SpendPeriod: BlockNumber = DAYS;
-//     pub const Burn: Permill = Permill::from_percent(0); // Not burning any funds for now
-//     pub const TipCountdown: BlockNumber = DAYS;
-//     pub const TipFindersFee: Percent = Percent::from_percent(20);
-//     pub const TipReportDepositBase: Balance = AVL;
-//     pub const DataDepositPerByte: Balance = CENTS;
-//     pub const MaximumReasonLength: u32 = 16384;
-//     pub const MaxApprovals: u32 = 100;
-// }
-
-// parameter_types! {
-//     // https://www.youtube.com/watch?v=HX7vRpOip5U&t=1664s
-//     pub const ProposalBond: Permill = Permill::from_percent(5);
-//     pub const ProposalBondMinimum: Balance = 1 * DOLLARS;
-//     pub const ProposalBondMaximum: Balance = 500 * DOLLARS;
-//     pub const SpendPeriod: BlockNumber = 24 * DAYS;
-//     pub const Burn: Permill = Permill::from_percent(1);
-//     pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
-//
-//     pub const TipCountdown: BlockNumber = 1 * DAYS;
-//     pub const TipFindersFee: Percent = Percent::from_percent(20);
-//     pub const TipReportDepositBase: Balance = 1 * DOLLARS;
-//     pub const DataDepositPerByte: Balance = 1 * CENTS;
-//     pub const MaxApprovals: u32 = 100;
-//     pub const MaxAuthorities: u32 = 100;
-//     pub const MaxKeys: u32 = 10_000;
-//     pub const MaxPeerInherentDataSize: u32 = 1_800;
-//     pub const MaxPeerDataEncodingSize: u32 = 1_800;
-// }
-
-
-
-// parameter_types! {
-//     pub BountyDepositBase: Balance = 1;
-//     pub const BountyDepositPayoutDelay: BlockNumber = 6 * DAYS;
-//     pub const BountyUpdatePeriod: BlockNumber = 35 * DAYS;
-//     pub BountyValueMinimum: Balance = 5;
-//     pub const CuratorDepositMultiplier: Permill = Permill::from_percent(50);
-//     pub CuratorDepositMin: Balance = 1;
-//     pub CuratorDepositMax: Balance = 100;
-//     pub DataDepositPerByte: Balance = 1;
-//     pub const MaximumReasonLength: u32 = 8192;
-// }
-//
-
-
-
 
 parameter_types! {
     pub const TreasuryPalletId: PalletId = PalletId(*b"g6/trsry");
@@ -542,8 +490,8 @@ impl pallet_bounties::Config for Runtime {
 //     type VetoOrigin = pallet_collective::EnsureMember<AccountId, CouncilCollective>;
 //     // type PalletsOrigin = OriginCaller;
 //     type PalletsOrigin = EnsureRoot<AccountId>;
-//     // type Slash = Treasury;
-//     type Slash = ();
+//     type Slash = Treasury;
+//     // type Slash = ();
 // }
 
 construct_runtime!(

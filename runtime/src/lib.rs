@@ -6,20 +6,22 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+use frame_support::traits::EqualPrivilegeOnly;
 use frame_system::EnsureRoot;
 use pallet_grandpa::AuthorityId as GrandpaId;
 use pallet_identity::legacy::IdentityInfo;
 use sp_api::impl_runtime_apis;
+use sp_runtime::Percent;
+use frame_support::PalletId;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
+use sp_runtime::traits::AccountIdConversion;
 use sp_runtime::{
     create_runtime_str, generic, impl_opaque_keys,
     traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, NumberFor, One, Verify},
     transaction_validity::{TransactionSource, TransactionValidity},
     ApplyExtrinsicResult, MultiSignature,
 };
-use frame_support::traits::EqualPrivilegeOnly;
-use frame_support::traits::Contains;
 use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -325,93 +327,6 @@ impl pallet_membership::Config for Runtime {
     type WeightInfo = pallet_membership::weights::SubstrateWeight<Runtime>;
 }
 
-// parameter_types! {
-//     pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
-//     pub const ProposalBond: Permill = Permill::from_percent(5);
-//     pub const ProposalBondMinimum: Balance = AVL;
-//     pub const SpendPeriod: BlockNumber = DAYS;
-//     pub const Burn: Permill = Permill::from_percent(0); // Not burning any funds for now
-//     pub const TipCountdown: BlockNumber = DAYS;
-//     pub const TipFindersFee: Percent = Percent::from_percent(20);
-//     pub const TipReportDepositBase: Balance = AVL;
-//     pub const DataDepositPerByte: Balance = CENTS;
-//     pub const MaximumReasonLength: u32 = 16384;
-//     pub const MaxApprovals: u32 = 100;
-// }
-
-// parameter_types! {
-//     https://www.youtube.com/watch?v=HX7vRpOip5U&t=1664s
-//     pub const ProposalBond: Permill = Permill::from_percent(5);
-//     pub const ProposalBondMinimum: Balance = 1 * DOLLARS;
-//     pub const ProposalBondMaximum: Balance = 500 * DOLLARS;
-//     pub const SpendPeriod: BlockNumber = 24 * DAYS;
-//     pub const Burn: Permill = Permill::from_percent(1);
-//     pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
-//
-//     pub const TipCountdown: BlockNumber = 1 * DAYS;
-//     pub const TipFindersFee: Percent = Percent::from_percent(20);
-//     pub const TipReportDepositBase: Balance = 1 * DOLLARS;
-//     pub const DataDepositPerByte: Balance = 1 * CENTS;
-//     pub const MaxApprovals: u32 = 100;
-//     pub const MaxAuthorities: u32 = 100;
-//     pub const MaxKeys: u32 = 10_000;
-//     pub const MaxPeerInherentDataSize: u32 = 1_800;
-//     pub const MaxPeerDataEncodingSize: u32 = 1_800;
-// }
-//
-// parameter_types! {
-//     pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
-// 	pub const ProposalBond: Permill = Permill::from_percent(5);
-// 	pub ProposalBondMinimum: Balance = 10;
-// 	pub ProposalBondMaximum: Balance = 50;
-// 	pub const SpendPeriod: BlockNumber = 30 * DAYS;
-// 	pub const Burn: Permill = Permill::from_percent(0); // Not burning any funds for now
-// 	pub const TipCountdown: BlockNumber = 2 * DAYS;
-// 	pub const TipFindersFee: Percent = Percent::from_percent(5);
-// 	pub TipReportDepositBase: Balance = 1;
-// 	pub BountyDepositBase: Balance = 1;
-// 	pub const BountyDepositPayoutDelay: BlockNumber = 6 * DAYS;
-// 	pub const BountyUpdatePeriod: BlockNumber = 35 * DAYS;
-// 	pub const CuratorDepositMultiplier: Permill = Permill::from_percent(50);
-// 	pub CuratorDepositMin: Balance = 1;
-// 	pub CuratorDepositMax: Balance = 100;
-// 	pub BountyValueMinimum: Balance = 5;
-// 	pub DataDepositPerByte: Balance = 1;
-// 	pub const MaximumReasonLength: u32 = 8192;
-// 	pub const PayoutSpendPeriod: BlockNumber = 30 * DAYS;
-// 	pub const SevenDays: BlockNumber = 7 * DAYS;
-// 	pub const OneDay: BlockNumber = DAYS;
-// }
-//
-//
-// impl pallet_treasury::Config for Runtime {
-//     type PalletId = TreasuryPalletId;
-//     type Currency = Balances;
-//     type ApproveOrigin = EnsureRoot<AccountId>;
-//     type RejectOrigin = EnsureRoot<AccountId>;
-//     type SpendOrigin = frame_support::traits::NeverEnsureOrigin<u128>;
-//     type RuntimeEvent = RuntimeEvent;
-//     type OnSlash = Treasury;
-//     type ProposalBond = ProposalBond;
-//     type ProposalBondMinimum = ProposalBondMinimum;
-//     type ProposalBondMaximum = ProposalBondMaximum;
-//     type SpendPeriod = SpendPeriod;
-//     type Burn = Burn;
-//     type BurnDestination = ();
-//     type SpendFunds = ();
-//     type WeightInfo = ();
-//     type MaxApprovals = ConstU32<30>;
-//     type AssetKind = ();
-//     type Beneficiary = AccountId;
-//     type BeneficiaryLookup = IdentityLookup<Self::Beneficiary>;
-//     type Paymaster = PayFromAccount<Balances, AcalaTreasuryAccount>;
-//     type BalanceConverter = UnityAssetBalanceConversion;
-//     type PayoutPeriod = PayoutSpendPeriod;
-//     #[cfg(feature = "runtime-benchmarks")]
-//     type BenchmarkHelper = ();
-// }
-//
-
 parameter_types! {
     pub PreimageBaseDeposit: Balance = 1; // TODO CHANGE
     pub PreimageByteDeposit: Balance = 1; // TODO CHANGE
@@ -435,9 +350,8 @@ impl pallet_preimage::Config for Runtime {
     type Consideration = ();
 }
 
-
 parameter_types! {
-	// pub MaximumSchedulerWeight: Weight = Perbill::from_percent(80) * RuntimeBlockWeights::get().max_block;
+    // pub MaximumSchedulerWeight: Weight = Perbill::from_percent(80) * RuntimeBlockWeights::get().max_block;
     pub MaximumSchedulerWeight: Weight = Weight::from_parts(Perbill::from_percent(80).deconstruct() as u64, 0); // TODO change this configuration
 }
 
@@ -454,6 +368,77 @@ impl pallet_scheduler::Config for Runtime {
     type Preimages = Preimage;
 }
 
+
+parameter_types! {
+    pub const TreasuryPalletId: PalletId = PalletId(*b"g6/trsry");
+    pub G6TreasuryAccount: AccountId = TreasuryPalletId::get().into_account_truncating();
+    pub const ProposalBond: Permill = Permill::from_percent(5);
+    pub ProposalBondMinimum: Balance = 10;
+    pub ProposalBondMaximum: Balance = 50;
+    pub const SpendPeriod: BlockNumber = 30 * DAYS;
+    pub const Burn: Permill = Permill::from_percent(0); // Not burning any funds for now
+    pub const TipCountdown: BlockNumber = 2 * DAYS;
+    pub const TipFindersFee: Percent = Percent::from_percent(5);
+    pub TipReportDepositBase: Balance = 1;
+    pub BountyDepositBase: Balance = 1;
+    pub const BountyDepositPayoutDelay: BlockNumber = 6 * DAYS;
+    pub const BountyUpdatePeriod: BlockNumber = 35 * DAYS;
+    pub const CuratorDepositMultiplier: Permill = Permill::from_percent(50);
+    pub CuratorDepositMin: Balance = 1;
+    pub CuratorDepositMax: Balance = 100;
+    pub BountyValueMinimum: Balance = 5;
+    pub DataDepositPerByte: Balance = 1;
+    pub const MaximumReasonLength: u32 = 8192;
+    pub const PayoutSpendPeriod: BlockNumber = 30 * DAYS;
+    pub const SevenDays: BlockNumber = 7 * DAYS;
+    pub const OneDay: BlockNumber = DAYS;
+}
+
+
+impl pallet_treasury::Config for Runtime {
+    type Currency = Balances;
+    type ApproveOrigin = EnsureRoot<AccountId>;
+    type RejectOrigin = EnsureRoot<AccountId>;
+    type RuntimeEvent = RuntimeEvent;
+    type OnSlash = Treasury;
+    type ProposalBond = ProposalBond;
+    type ProposalBondMinimum = ProposalBondMinimum;
+    type ProposalBondMaximum = ProposalBondMaximum;
+    type SpendPeriod = SpendPeriod;
+    type Burn = Burn;
+    type PalletId = TreasuryPalletId;
+    type BurnDestination = ();
+    type WeightInfo = ();
+    type SpendFunds = Bounties;
+    // type SpendFunds = ();
+    type MaxApprovals = ConstU32<30>;
+    type SpendOrigin = frame_support::traits::NeverEnsureOrigin<u128>;
+    type AssetKind = ();
+    type Beneficiary = AccountId;
+    type BeneficiaryLookup = IdentityLookup<Self::Beneficiary>;
+    type Paymaster = PayFromAccount<Balances, G6TreasuryAccount>;
+    type BalanceConverter = UnityAssetBalanceConversion;
+    type PayoutPeriod = PayoutSpendPeriod;
+    #[cfg(feature = "runtime-benchmarks")]
+    type BenchmarkHelper = ();
+}
+
+impl pallet_bounties::Config for Runtime {
+    type BountyDepositBase = BountyDepositBase;
+    type BountyDepositPayoutDelay = BountyDepositPayoutDelay;
+    type BountyUpdatePeriod = BountyUpdatePeriod;
+    type CuratorDepositMultiplier = CuratorDepositMultiplier;
+    type CuratorDepositMax = CuratorDepositMax;
+    type CuratorDepositMin = CuratorDepositMin;
+    type BountyValueMinimum = BountyValueMinimum;
+    type DataDepositPerByte = DataDepositPerByte;
+    type RuntimeEvent = RuntimeEvent;
+    type MaximumReasonLength = MaximumReasonLength;
+    type WeightInfo = ();
+    type ChildBountyManager = ();
+}
+
+
 // pub struct BaseCallFilter;
 // impl Contains<RuntimeCall> for BaseCallFilter {
 //     fn contains(call: &RuntimeCall) -> bool {
@@ -461,7 +446,7 @@ impl pallet_scheduler::Config for Runtime {
 //             && !matches!(call, RuntimeCall::Democracy(pallet_democracy::Call::propose { .. }),)
 //     }
 // }
-//
+
 // parameter_types! {
 //     pub const LaunchPeriod: BlockNumber = 5 * DAYS;
 //     pub const VotingPeriod: BlockNumber = 5 * DAYS;
@@ -501,9 +486,11 @@ impl pallet_scheduler::Config for Runtime {
 //     type BlacklistOrigin = EnsureRoot<AccountId>;
 //     type CancelProposalOrigin = EnsureRoot<AccountId>;
 //     type VetoOrigin = EnsureRoot<AccountId>;
-//     type PalletsOrigin = OriginCaller;
-//     // type Slash = Treasury;
-//     type Slash = ();
+//     type VetoOrigin = pallet_collective::EnsureMember<AccountId, CouncilCollective>;
+//     // type PalletsOrigin = OriginCaller;
+//     type PalletsOrigin = EnsureRoot<AccountId>;
+//     type Slash = Treasury;
+//     // type Slash = ();
 // }
 
 construct_runtime!(
@@ -519,50 +506,12 @@ construct_runtime!(
         Collective: pallet_collective::<Instance1>,
         Membership: pallet_membership,
         Preimage: pallet_preimage,
-		Scheduler: pallet_scheduler,
+        Scheduler: pallet_scheduler,
+        Bounties: pallet_bounties,
+        Treasury: pallet_treasury,
         // Democracy: pallet_democracy,
-        // Treasury: pallet_treasury,
     }
 );
-
-// impl pallet_treasury::Config for Runtime {
-//     type PalletId = TreasuryPalletId;
-//     type Currency = Balances;
-//     type ApproveOrigin = EnsureRoot<AccountId>;
-//     type Burn = Burn;
-//     type BurnDestination = ();
-//     type MaxApprovals = MaxApprovals;
-//     type OnSlash = Treasury;
-//     type ProposalBond = ProposalBond;
-//     type ProposalBondMaximum = ();
-//     type ProposalBondMinimum = ProposalBondMinimum;
-//     type RejectOrigin = EnsureRoot<AccountId>;
-//     type RuntimeEvent = RuntimeEvent;
-//     type SpendFunds = Bounties;
-//     type SpendOrigin = frame_support::traits::NeverEnsureOrigin<u128>;
-//     type SpendPeriod = SpendPeriod;
-//     type WeightInfo = weights::pallet_treasury::WeightInfo<Runtime>;
-//
-//     #[doc = " Type parameter representing the asset kinds to be spent from the treasury."]
-//     type AssetKind =
-//
-//     #[doc = " Type parameter used to identify the beneficiaries eligible to receive treasury spends."]
-//     type Beneficiary;
-//
-//     #[doc = " Converting trait to take a source type and convert to [`Self::Beneficiary`]."]
-//     type BeneficiaryLookup;
-//
-//     #[doc = " Type for processing spends of [Self::AssetKind] in favor of [`Self::Beneficiary`]."]
-//     type Paymaster;
-//
-//     #[doc = " Type for converting the balance of an [Self::AssetKind] to the balance of the native"]
-//     #[doc = " asset, solely for the purpose of asserting the result against the maximum allowed spend"]
-//     #[doc = " amount of the [`Self::SpendOrigin`]."]
-//     type BalanceConverter;
-//
-//     #[doc = " The period during which an approved treasury spend has to be claimed."]
-//     type PayoutPeriod;
-// }
 
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
@@ -581,6 +530,8 @@ pub type SignedExtra = (
     frame_system::CheckWeight<Runtime>,
     pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 );
+
+
 
 /// All migrations of the runtime, aside from the ones declared in the pallets.
 ///

@@ -18,7 +18,6 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [[bin]]
-#name = "node-template"
 name = "g6-solo-node"
 
 [dependencies]
@@ -64,7 +63,7 @@ frame-benchmarking = { workspace = true }
 frame-benchmarking-cli = { workspace = true }
 
 # Local Dependencies
-node-template-runtime = { workspace = true }
+g6-solo-runtime = { workspace = true }
 
 # CLI-specific dependencies
 try-runtime-cli = { workspace = true, optional = true }
@@ -79,7 +78,8 @@ runtime-benchmarks = [
 	"frame-benchmarking-cli/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
-	"node-template-runtime/runtime-benchmarks",
+#	"node-template-runtime/runtime-benchmarks",
+	"g6-solo-runtime/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 ]
@@ -87,7 +87,8 @@ runtime-benchmarks = [
 # in the near future.
 try-runtime = [
 	"frame-system/try-runtime",
-	"node-template-runtime/try-runtime",
+#	"node-template-runtime/try-runtime",
+	"g6-solo-runtime/try-runtime",
 	"pallet-transaction-payment/try-runtime",
 	"sp-runtime/try-runtime",
 	"try-runtime-cli/try-runtime",

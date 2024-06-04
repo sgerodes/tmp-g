@@ -1,17 +1,15 @@
 [package]
-#name = "pallet-template"
 name = "g6-solo-pallet"
-#version = "4.0.0-dev"
-#description = "FRAME pallet template for defining custom runtime logic."
-version = "0.1.0"
 description = "G6 Solo Chain FRAME pallets with custom runtime logic."
-authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
-#homepage = "https://substrate.io/"
-homepage = "https://g6.network/"
-edition.workspace = true
-license = "XXX"                # TODO There is no SPDX abbreviation for "all rights reserved" proprietary license!
 publish = false
-repository = "https://g.g6.network/g6-chain/solo-chain"
+version.workspace = true
+homepage.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
 
 [lints]
 workspace = true

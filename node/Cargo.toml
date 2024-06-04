@@ -1,19 +1,15 @@
 [package]
-#name = "node-template"
 name = "g6-solo-node"
-#version = "4.0.0-dev"
-#description = "A fresh FRAME-based Substrate node, ready for hacking."
-version = "0.1.0"
 description = "A FRAME-based Substrate G6 Solo Chain node."
-authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
-#homepage = "https://substrate.io/"
-homepage = "https://g6.network/"
-edition.workspace = true
-#license = "MIT-0"
-license = "XXX"                # TODO There is no SPDX abbreviation for "all rights reserved" proprietary license!
 publish = false
-repository = "https://g.g6.network/g6-chain/solo-chain"
 build = "build.rs"
+version.workspace = true
+homepage.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+edition.workspace = true
+rust-version.workspace = true
 
 [lints]
 workspace = true
@@ -22,10 +18,12 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [[bin]]
-#name = "node-template"
 name = "g6-solo-node"
 
 [dependencies]
+# Local Dependencies
+g6-solo-runtime = { workspace = true }
+
 clap = { version = "4.4.18", features = ["derive"] }
 futures = { version = "0.3.21", features = ["thread-pool"] }
 serde_json = "1.0.111"
@@ -67,8 +65,6 @@ pallet-transaction-payment-rpc = { workspace = true }
 frame-benchmarking = { workspace = true }
 frame-benchmarking-cli = { workspace = true }
 
-# Local Dependencies
-node-template-runtime = { workspace = true }
 
 # CLI-specific dependencies
 try-runtime-cli = { workspace = true, optional = true }
@@ -83,7 +79,7 @@ runtime-benchmarks = [
 	"frame-benchmarking-cli/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
-	"node-template-runtime/runtime-benchmarks",
+	"g6-solo-runtime/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 ]
@@ -91,7 +87,7 @@ runtime-benchmarks = [
 # in the near future.
 try-runtime = [
 	"frame-system/try-runtime",
-	"node-template-runtime/try-runtime",
+	"g6-solo-runtime/try-runtime",
 	"pallet-transaction-payment/try-runtime",
 	"sp-runtime/try-runtime",
 	"try-runtime-cli/try-runtime",

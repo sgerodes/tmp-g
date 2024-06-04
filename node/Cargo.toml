@@ -1,19 +1,15 @@
 [package]
-#name = "node-template"
 name = "g6-solo-node"
-#version = "4.0.0-dev"
-#description = "A fresh FRAME-based Substrate node, ready for hacking."
-version = "0.1.0"
 description = "A FRAME-based Substrate G6 Solo Chain node."
-authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
-#homepage = "https://substrate.io/"
-homepage = "https://g6.network/"
-edition.workspace = true
-#license = "MIT-0"
-license = "XXX"                # TODO There is no SPDX abbreviation for "all rights reserved" proprietary license!
 publish = false
-repository = "https://g.g6.network/g6-chain/solo-chain"
 build = "build.rs"
+version.workspace = true
+homepage.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+edition.workspace = true
+rust-version.workspace = true
 
 [lints]
 workspace = true

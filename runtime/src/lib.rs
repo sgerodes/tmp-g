@@ -394,7 +394,6 @@ parameter_types! {
     pub const OneDay: BlockNumber = DAYS;
 }
 
-
 impl pallet_treasury::Config for Runtime {
     type Currency = Balances;
     type ApproveOrigin = EnsureRoot<AccountId>;
@@ -456,7 +455,7 @@ impl pallet_bounties::Config for Runtime {
 //     pub const VoteLockingPeriod: BlockNumber = 14 * DAYS;
 //     pub const CooloffPeriod: BlockNumber = 7 * DAYS;
 // }
-//
+
 // impl pallet_democracy::Config for Runtime {
 //     type WeightInfo = pallet_democracy::weights::SubstrateWeight<Runtime>;
 //     type RuntimeEvent = RuntimeEvent;
@@ -493,6 +492,48 @@ impl pallet_bounties::Config for Runtime {
 //     // type Slash = ();
 // }
 
+// parameter_types! {
+//     pub Features: PalletFeatures = PalletFeatures::all_enabled();
+//     pub const MaxAttributesPerCall: u32 = 10;
+//     pub const CollectionDeposit: Balance = 100 * UNIT;
+//     pub const ItemDeposit: Balance = 1 * UNIT;
+//     pub const ApprovalsLimit: u32 = 20;
+//     pub const ItemAttributesApprovalsLimit: u32 = 20;
+//     pub const MaxTips: u32 = 10;
+//     pub const MaxDeadlineDuration: BlockNumber = 12 * 30 * DAYS;
+//     pub const MetadataDepositBase: Balance = 10 * UNIT;
+//     pub const MetadataDepositPerByte: Balance = 1 * UNIT;
+// }
+//
+// impl pallet_nfts::Config for Runtime {
+//     type RuntimeEvent = RuntimeEvent;
+//     type CollectionId = u32;
+//     type ItemId = u32;
+//     type Currency = Balances;
+//     type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
+//     type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+//     type CollectionDeposit = CollectionDeposit;
+//     type ItemDeposit = ItemDeposit;
+//     type MetadataDepositBase = MetadataDepositBase;
+//     type AttributeDepositBase = MetadataDepositBase;
+//     type DepositPerByte = MetadataDepositPerByte;
+//     type StringLimit = ConstU32<256>;
+//     type KeyLimit = ConstU32<64>;
+//     type ValueLimit = ConstU32<256>;
+//     type ApprovalsLimit = ApprovalsLimit;
+//     type ItemAttributesApprovalsLimit = ItemAttributesApprovalsLimit;
+//     type MaxTips = MaxTips;
+//     type MaxDeadlineDuration = MaxDeadlineDuration;
+//     type MaxAttributesPerCall = MaxAttributesPerCall;
+//     type Features = Features;
+//     type OffchainSignature = Signature;
+//     type OffchainPublic = <Signature as Verify>::Signer;
+//     type WeightInfo = pallet_nfts::weights::SubstrateWeight<Runtime>;
+//     #[cfg(feature = "runtime-benchmarks")]
+//     type Helper = ();
+//     type Locker = ();
+// }
+
 construct_runtime!(
     pub enum Runtime {
         System: frame_system,
@@ -510,6 +551,7 @@ construct_runtime!(
         Bounties: pallet_bounties,
         Treasury: pallet_treasury,
         // Democracy: pallet_democracy,
+        // Nfts: pallet_nfts,
     }
 );
 

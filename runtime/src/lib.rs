@@ -6,7 +6,6 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
-use frame_support::traits::Contains;
 use frame_support::traits::EqualPrivilegeOnly;
 use frame_system::EnsureRoot;
 use pallet_grandpa::AuthorityId as GrandpaId;

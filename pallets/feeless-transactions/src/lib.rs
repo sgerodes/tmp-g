@@ -10,11 +10,11 @@ pub use weights::*;
 
 #[frame_support::pallet(dev_mode)]
 pub mod pallet {
+    use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
     #[pallet::pallet]
-    #[pallet::generate_store(pub(super) trait Store)]
     pub struct Pallet<T>(_);
 
     #[pallet::config]
@@ -38,17 +38,11 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         #[pallet::call_index(0)]
         #[pallet::weight(T::WeightInfo::do_something())]
-        pub fn do_something(origin: OriginFor<T>, something: u32) -> DispatchResult {
+        pub fn do_something(origin: OriginFor<T>) -> DispatchResult {
             let _who = ensure_signed(origin)?;
             Self::deposit_event(Event::DummyEvent);
             Ok(())
         }
 
-        #[pallet::call_index(1)]
-        #[pallet::weight(T::WeightInfo::cause_error())]
-        pub fn cause_error(origin: OriginFor<T>) -> DispatchResult {
-            let _who = ensure_signed(origin)?;
-            Err(Error::<T>::NoneValue.into());
-        }
     }
 }

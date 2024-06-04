@@ -2,7 +2,7 @@ FROM solo-chain-build
 
 WORKDIR /workspace
 
-ENV NODE_EXECUTABLE="./target/release/g6-solo-node"
+ENV NODE_EXECUTABLE="/workspace/target/release/g6-solo-node"
 ENV STATE_DATA_BASE_FOLDER=./chain-data/
 
 CMD $NODE_EXECUTABLE \

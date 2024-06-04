@@ -25,7 +25,6 @@ scale-info = { version = "2.10.0", default-features = false, features = ["derive
 
 pallet-aura = { workspace = true, default-features = false }
 pallet-balances = { workspace = true, default-features = false }
-frame-support = { workspace = true, default-features = false }
 pallet-grandpa = { workspace = true, default-features = false }
 pallet-sudo = { workspace = true, default-features = false }
 pallet-identity = { workspace = true, default-features = false }
@@ -37,10 +36,12 @@ pallet-scheduler = { workspace = true, default-features = false }
 pallet-bounties = { workspace = true, default-features = false }
 pallet-nfts = { workspace = true, default-features = false }
 pallet-collective = { workspace = true, default-features = false }
-frame-system = { workspace = true, default-features = false }
-frame-try-runtime = { workspace = true, default-features = false, optional = true }
 pallet-timestamp = { workspace = true, default-features = false }
 pallet-transaction-payment = { workspace = true, default-features = false }
+
+frame-support = { workspace = true, default-features = false }
+frame-system = { workspace = true, default-features = false }
+frame-try-runtime = { workspace = true, default-features = false, optional = true }
 frame-executive = { workspace = true, default-features = false }
 sp-api = { workspace = true, default-features = false }
 sp-block-builder = { workspace = true, default-features = false }
@@ -57,7 +58,6 @@ sp-transaction-pool = { workspace = true, default-features = false }
 sp-version = { workspace = true, default-features = false, features = ["serde"] }
 serde_json = { version = "1.0.111", default-features = false, features = ["alloc"] }
 sp-genesis-builder = { default-features = false, workspace = true }
-
 # Used for the node template's RPCs
 frame-system-rpc-runtime-api = { workspace = true, default-features = false }
 pallet-transaction-payment-rpc-runtime-api = { workspace = true, default-features = false }

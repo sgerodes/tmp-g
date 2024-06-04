@@ -4,3 +4,6 @@ tmp/
 ./tmp*
 _localdev/tmp/*
 _localdev/parachain-configs*
+data
+serge.sh
+chain-data

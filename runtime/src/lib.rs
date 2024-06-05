@@ -505,7 +505,6 @@ impl pallet_democracy::Config for Runtime {
     type InstantAllowed = ConstBool<true>;
     type FastTrackVotingPeriod = FastTrackVotingPeriod;
     type CooloffPeriod = CooloffPeriod;
-    // type PalletsOrigin = EnsureRoot<AccountId>;
     type MaxVotes = ConstU32<100>;
     type MaxProposals = ConstU32<100>;
     type MaxDeposits = ConstU32<100>;
@@ -519,12 +518,9 @@ impl pallet_democracy::Config for Runtime {
     type CancellationOrigin = EnsureRoot<AccountId>;
     type BlacklistOrigin = EnsureRoot<AccountId>;
     type CancelProposalOrigin = EnsureRoot<AccountId>;
-    // type VetoOrigin = EnsureRoot<AccountId>;
     type VetoOrigin = pallet_collective::EnsureMember<AccountId, CouncilCollective>;
     type PalletsOrigin = OriginCaller;
-    // type PalletsOrigin = EnsureRoot<AccountId>;
     type Slash = Treasury;
-    // type Slash = ();
 }
 
 

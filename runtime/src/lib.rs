@@ -481,59 +481,51 @@ impl pallet_nfts::Config for Runtime {
 }
 
 
-// pub struct BaseCallFilter;
-// impl Contains<RuntimeCall> for BaseCallFilter {
-//     fn contains(call: &RuntimeCall) -> bool {
-//         !module_transaction_pause::PausedTransactionFilter::<Runtime>::contains(call)
-//             && !matches!(call, RuntimeCall::Democracy(pallet_democracy::Call::propose { .. }),)
-//     }
-// }
+parameter_types! {
+    pub const LaunchPeriod: BlockNumber = 5 * DAYS;
+    pub const VotingPeriod: BlockNumber = 5 * DAYS;
+    pub const FastTrackVotingPeriod: BlockNumber = 3 * HOURS;
+    pub MinimumDeposit: Balance = 1000;
+    pub const EnactmentPeriod: BlockNumber = 2 * DAYS;
+    pub const VoteLockingPeriod: BlockNumber = 14 * DAYS;
+    pub const CooloffPeriod: BlockNumber = 7 * DAYS;
+}
 
-// parameter_types! {
-//     pub const LaunchPeriod: BlockNumber = 5 * DAYS;
-//     pub const VotingPeriod: BlockNumber = 5 * DAYS;
-//     pub const FastTrackVotingPeriod: BlockNumber = 3 * HOURS;
-//     pub MinimumDeposit: Balance = 1000;
-//     pub const EnactmentPeriod: BlockNumber = 2 * DAYS;
-//     pub const VoteLockingPeriod: BlockNumber = 14 * DAYS;
-//     pub const CooloffPeriod: BlockNumber = 7 * DAYS;
-// }
-
-// impl pallet_democracy::Config for Runtime {
-//     type WeightInfo = pallet_democracy::weights::SubstrateWeight<Runtime>;
-//     type RuntimeEvent = RuntimeEvent;
-//     type Scheduler = Scheduler;
-//     type Preimages = Preimage;
-//     type Currency = Balances;
-//     type EnactmentPeriod = EnactmentPeriod;
-//     type LaunchPeriod = LaunchPeriod;
-//     type VotingPeriod = VotingPeriod;
-//     type VoteLockingPeriod = VoteLockingPeriod;
-//     type MinimumDeposit = MinimumDeposit;
-//     type InstantAllowed = ConstBool<true>;
-//     type FastTrackVotingPeriod = FastTrackVotingPeriod;
-//     type CooloffPeriod = CooloffPeriod;
-//     // type PalletsOrigin = EnsureRoot<AccountId>;
-//     type MaxVotes = ConstU32<100>;
-//     type MaxProposals = ConstU32<100>;
-//     type MaxDeposits = ConstU32<100>;
-//     type MaxBlacklisted = ConstU32<100>;
-//     type ExternalOrigin = EnsureRoot<AccountId>;
-//     type ExternalMajorityOrigin = EnsureRoot<AccountId>;
-//     type ExternalDefaultOrigin = EnsureRoot<AccountId>;
-//     type SubmitOrigin = EnsureRoot<AccountId>;
-//     type FastTrackOrigin = EnsureRoot<AccountId>;
-//     type InstantOrigin = EnsureRoot<AccountId>;
-//     type CancellationOrigin = EnsureRoot<AccountId>;
-//     type BlacklistOrigin = EnsureRoot<AccountId>;
-//     type CancelProposalOrigin = EnsureRoot<AccountId>;
-//     type VetoOrigin = EnsureRoot<AccountId>;
-//     type VetoOrigin = pallet_collective::EnsureMember<AccountId, CouncilCollective>;
-//     // type PalletsOrigin = OriginCaller;
-//     type PalletsOrigin = EnsureRoot<AccountId>;
-//     type Slash = Treasury;
-//     // type Slash = ();
-// }
+impl pallet_democracy::Config for Runtime {
+    type WeightInfo = pallet_democracy::weights::SubstrateWeight<Runtime>;
+    type RuntimeEvent = RuntimeEvent;
+    type Scheduler = Scheduler;
+    type Preimages = Preimage;
+    type Currency = Balances;
+    type EnactmentPeriod = EnactmentPeriod;
+    type LaunchPeriod = LaunchPeriod;
+    type VotingPeriod = VotingPeriod;
+    type VoteLockingPeriod = VoteLockingPeriod;
+    type MinimumDeposit = MinimumDeposit;
+    type InstantAllowed = ConstBool<true>;
+    type FastTrackVotingPeriod = FastTrackVotingPeriod;
+    type CooloffPeriod = CooloffPeriod;
+    // type PalletsOrigin = EnsureRoot<AccountId>;
+    type MaxVotes = ConstU32<100>;
+    type MaxProposals = ConstU32<100>;
+    type MaxDeposits = ConstU32<100>;
+    type MaxBlacklisted = ConstU32<100>;
+    type ExternalOrigin = EnsureRoot<AccountId>;
+    type ExternalMajorityOrigin = EnsureRoot<AccountId>;
+    type ExternalDefaultOrigin = EnsureRoot<AccountId>;
+    type SubmitOrigin = EnsureSigned<AccountId>;
+    type FastTrackOrigin = EnsureRoot<AccountId>;
+    type InstantOrigin = EnsureRoot<AccountId>;
+    type CancellationOrigin = EnsureRoot<AccountId>;
+    type BlacklistOrigin = EnsureRoot<AccountId>;
+    type CancelProposalOrigin = EnsureRoot<AccountId>;
+    // type VetoOrigin = EnsureRoot<AccountId>;
+    type VetoOrigin = pallet_collective::EnsureMember<AccountId, CouncilCollective>;
+    type PalletsOrigin = OriginCaller;
+    // type PalletsOrigin = EnsureRoot<AccountId>;
+    type Slash = Treasury;
+    // type Slash = ();
+}
 
 
 construct_runtime!(
@@ -553,7 +545,7 @@ construct_runtime!(
         Bounties: pallet_bounties,
         Treasury: pallet_treasury,
         Nfts: pallet_nfts,
-        // Democracy: pallet_democracy,
+        Democracy: pallet_democracy,
     }
 );
 

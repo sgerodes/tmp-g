@@ -42,9 +42,8 @@ default_constructed_unit_structs = { level = "allow", priority = 2 } # stylistic
 
 
 [workspace.dependencies]
-#node-template-runtime = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0" }
-g6-solo-runtime = { path = "./runtime"}
-g6-solo-node = { path = "./node"}
+g6-solo-runtime = { path = "./runtime" }
+g6-solo-node = { path = "./node" }
 pallet-template = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 
 clap = { version = "4.4.18", features = ["derive"] }

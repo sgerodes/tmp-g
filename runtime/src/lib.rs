@@ -523,6 +523,11 @@ impl pallet_democracy::Config for Runtime {
     type Slash = Treasury;
 }
 
+impl pallet_feeless_playground::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type RuntimeCall = RuntimeCall;
+    type WeightInfo = pallet_feeless_playground::weights::SubstrateWeight<Runtime>;
+}
 
 construct_runtime!(
     pub enum Runtime {
@@ -542,6 +547,7 @@ construct_runtime!(
         Treasury: pallet_treasury,
         Nfts: pallet_nfts,
         Democracy: pallet_democracy,
+        FeelessPlaground: pallet_feeless_playground,
     }
 );
 

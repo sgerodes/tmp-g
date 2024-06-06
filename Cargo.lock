@@ -4956,6 +4956,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-feeless"
+version = "0.1.0"
+dependencies = [
+ "frame-support 28.0.0",
+ "frame-system 28.0.0",
+ "parity-scale-codec",
+ "scale-info",
+]
+
+[[package]]
 name = "pallet-grandpa"
 version = "28.0.0"
 source = "git+https://github.com/paritytech/polkadot-sdk.git?branch=release-polkadot-v1.7.0#6ee8d7065dcc0db44e60eb7f70d4ca5a4904f4ec"

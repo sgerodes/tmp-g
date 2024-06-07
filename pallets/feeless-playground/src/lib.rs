@@ -5,6 +5,8 @@ use frame_support::dispatch::GetDispatchInfo;
 use frame_support::traits::UnfilteredDispatchable;
 // use frame_system::RawOrigin;
 use scale_info::prelude::boxed::Box;
+use frame_support::dispatch::PostDispatchInfo;
+use sp_runtime::traits::Dispatchable;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
@@ -27,7 +29,13 @@ pub mod pallet {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         // #[pallet::no_default_bounds]
         // type RuntimeCall: Parameter + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin> + GetDispatchInfo;
-        type RuntimeCall: Parameter + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin> + GetDispatchInfo;
+        type RuntimeCall: Parameter
+        + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
+        + GetDispatchInfo
+        + Dispatchable<
+            RuntimeOrigin = Self::RuntimeOrigin,
+            PostInfo = PostDispatchInfo,
+        >;
         type WeightInfo: WeightInfo;
     }
 
@@ -51,13 +59,11 @@ pub mod pallet {
         pub fn feeless_fiesta(
             origin: OriginFor<T>,
             call: Box<<T as Config>::RuntimeCall>,
-            // call: <T as Config>::RuntimeCall,
         ) -> DispatchResultWithPostInfo {
-            // Make all transaction feeless;
             let _sender = ensure_signed(origin.clone())?;
 
-            let _res = call.dispatch_bypass_filter(origin);
-            // let _res = call.dispatch(origin);
+            // let _res = call.dispatch_bypass_filter(origin);
+            let _res = call.dispatch(origin);
 
             Self::deposit_event(Event::FeelessTransaction);
             Ok(Pays::No.into())

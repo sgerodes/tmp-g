@@ -18,7 +18,11 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-pallet-feeless-playground = { workspace = true }
+# Local Dependencies
+pallet-template = { workspace = true, default-features = false }
+pallet-feeless-playground = { workspace = true, default-features = false }
+
+
 codec = { package = "parity-scale-codec", version = "3.6.1", default-features = false, features = ["derive"] }
 scale-info = { version = "2.10.0", default-features = false, features = ["derive", "serde"] }
 
@@ -65,8 +69,6 @@ pallet-transaction-payment-rpc-runtime-api = { workspace = true, default-feature
 frame-benchmarking = { workspace = true, default-features = false, optional = true }
 frame-system-benchmarking = { workspace = true, default-features = false, optional = true }
 
-# Local Dependencies
-pallet-template = { workspace = true, default-features = false }
 
 [build-dependencies]
 substrate-wasm-builder = { workspace = true, optional = true }
@@ -74,8 +76,6 @@ substrate-wasm-builder = { workspace = true, optional = true }
 [features]
 default = ["std"]
 std = [
-    "pallet-feeless-playground/std",
-
     "codec/std",
     "frame-benchmarking?/std",
     "frame-executive/std",
@@ -118,6 +118,9 @@ std = [
     "sp-transaction-pool/std",
     "sp-version/std",
     "substrate-wasm-builder",
+
+    "pallet-template/std",
+    "pallet-feeless-playground/std",
 ]
 runtime-benchmarks = [
     "frame-benchmarking/runtime-benchmarks",
@@ -127,9 +130,11 @@ runtime-benchmarks = [
     "pallet-balances/runtime-benchmarks",
     "pallet-grandpa/runtime-benchmarks",
     "pallet-sudo/runtime-benchmarks",
-    "pallet-template/runtime-benchmarks",
     "pallet-timestamp/runtime-benchmarks",
     "sp-runtime/runtime-benchmarks",
+
+    "pallet-template/runtime-benchmarks",
+#    "pallet-feeless-playground/runtime-benchmarks",
 ]
 try-runtime = [
     "frame-executive/try-runtime",
@@ -140,9 +145,11 @@ try-runtime = [
     "pallet-balances/try-runtime",
     "pallet-grandpa/try-runtime",
     "pallet-sudo/try-runtime",
-    "pallet-template/try-runtime",
     "pallet-timestamp/try-runtime",
     "pallet-transaction-payment/try-runtime",
     "sp-runtime/try-runtime",
+
+    "pallet-template/try-runtime",
+#    "pallet-feeless-playground/try-runtime",
 ]
 experimental = ["pallet-aura/experimental"]

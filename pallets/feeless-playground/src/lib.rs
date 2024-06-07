@@ -3,7 +3,8 @@
 pub use pallet::*;
 use frame_support::dispatch::GetDispatchInfo;
 use frame_support::traits::UnfilteredDispatchable;
-use frame_system::RawOrigin;
+// use frame_system::RawOrigin;
+use scale_info::prelude::boxed::Box;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
@@ -11,7 +12,8 @@ pub mod weights;
 pub use weights::*;
 
 
-#[frame_support::pallet(dev_mode)]
+// #[frame_support::pallet(dev_mode)]
+#[frame_support::pallet]
 pub mod pallet {
     use super::*;
     use frame_support::pallet_prelude::*;
@@ -24,9 +26,8 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         // #[pallet::no_default_bounds]
-        type RuntimeCall: Parameter
-        + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
-        + GetDispatchInfo;
+        // type RuntimeCall: Parameter + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin> + GetDispatchInfo;
+        type RuntimeCall: Parameter + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin> + GetDispatchInfo;
         type WeightInfo: WeightInfo;
     }
 
@@ -48,11 +49,16 @@ pub mod pallet {
         #[pallet::call_index(0)]
         #[pallet::weight(T::WeightInfo::feeless_fiesta())]
         pub fn feeless_fiesta(
-            _origin: OriginFor<T>,
+            origin: OriginFor<T>,
             call: Box<<T as Config>::RuntimeCall>,
+            // call: <T as Config>::RuntimeCall,
         ) -> DispatchResultWithPostInfo {
-            // Make all transaction feeless
-            let _res = call.dispatch_bypass_filter(RawOrigin::Root.into());
+            // Make all transaction feeless;
+            let _sender = ensure_signed(origin.clone())?;
+
+            let _res = call.dispatch_bypass_filter(origin);
+            // let _res = call.dispatch(origin);
+
             Self::deposit_event(Event::FeelessTransaction);
             Ok(Pays::No.into())
         }

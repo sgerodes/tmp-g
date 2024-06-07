@@ -553,7 +553,7 @@ construct_runtime!(
         Treasury: pallet_treasury,
         Nfts: pallet_nfts,
         Democracy: pallet_democracy,
-        TemplateModule: pallet_template,
+        TemplateTemplate: pallet_template,
         FeelessPlaground: pallet_feeless_playground,
     }
 );

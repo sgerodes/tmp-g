@@ -14,7 +14,7 @@ pub trait WeightInfo {
 pub struct SubstrateWeight<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	fn feeless_fiesta() -> Weight {
-		Weight::from_parts(9_000, 0)
+		Weight::from_parts(9_000_000, 0)
 			.saturating_add(T::DbWeight::get().writes(1_u64))
 	}
 	fn do_something() -> Weight {
@@ -26,7 +26,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 
 impl WeightInfo for () {
 	fn feeless_fiesta() -> Weight {
-		Weight::from_parts(9_000, 0)
+		Weight::from_parts(9_000_000, 0)
 			.saturating_add(RocksDbWeight::get().writes(1_u64))
 	}
 	fn do_something() -> Weight {

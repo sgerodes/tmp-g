@@ -7,6 +7,7 @@ use frame_support::traits::UnfilteredDispatchable;
 use scale_info::prelude::boxed::Box;
 use frame_support::dispatch::PostDispatchInfo;
 use sp_runtime::traits::Dispatchable;
+// use frame_support::dispatch::Dispatchable;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
@@ -36,6 +37,8 @@ pub mod pallet {
             RuntimeOrigin = Self::RuntimeOrigin,
             PostInfo = PostDispatchInfo,
         >;
+        // type RuntimeCall: Parameter + GetDispatchInfo + Dispatchable<Origin=Self::RuntimeOrigin>;
+        // type RuntimeOrigin: From<RuntimeOrigin> + From<<Self as frame_system::Config>::RuntimeOrigin>;
         type WeightInfo: WeightInfo;
     }
 
@@ -56,13 +59,19 @@ pub mod pallet {
 
         #[pallet::call_index(0)]
         #[pallet::weight(T::WeightInfo::feeless_fiesta())]
+        // #[pallet::weight({
+        //     let dispatch_info = call.get_dispatch_info();
+        //     (dispatch_info.weight.saturating_add(10_000.into()), dispatch_info.class, Pays::Yes)
+        // })]
         pub fn feeless_fiesta(
             origin: OriginFor<T>,
+            // origin: T::RuntimeOrigin,
             call: Box<<T as Config>::RuntimeCall>,
+            // call: <T as pallet::Config>::RuntimeCall,
         ) -> DispatchResultWithPostInfo {
             let _sender = ensure_signed(origin.clone())?;
 
-            // let _res = call.dispatch_bypass_filter(origin);
+            // let _res = call.dispatch_bypass_filter(origin).map_err(|e| e.error)?;
             let _res = call.dispatch(origin);
 
             Self::deposit_event(Event::FeelessTransaction);
@@ -70,6 +79,7 @@ pub mod pallet {
         }
 
         #[pallet::call_index(1)]
+        // #[pallet::weight(100)]
         #[pallet::weight(T::WeightInfo::do_something())]
         pub fn do_something(origin: OriginFor<T>) -> DispatchResult {
             let _who = ensure_signed(origin)?;

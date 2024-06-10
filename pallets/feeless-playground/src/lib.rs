@@ -25,21 +25,39 @@ pub mod pallet {
     #[pallet::pallet]
     pub struct Pallet<T>(_);
 
-    #[pallet::config]
+    // #[pallet::config]
+    #[pallet::config(with_default)]
     pub trait Config: frame_system::Config {
+        #[pallet::no_default_bounds]
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
-        // #[pallet::no_default_bounds]
-        // type RuntimeCall: Parameter + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin> + GetDispatchInfo;
+        #[pallet::no_default_bounds]
         type RuntimeCall: Parameter
-        + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
-        + GetDispatchInfo
-        + Dispatchable<
-            RuntimeOrigin = Self::RuntimeOrigin,
-            PostInfo = PostDispatchInfo,
-        >;
+        + Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
+        + From<Call<Self>>;
+        type WeightInfo: WeightInfo;
+
+        // #[pallet::no_default_bounds]
+        // type RuntimeEvent: Parameter
+        // + Member
+        // + From<Event<Self>>
+        // + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+
+        // #[pallet::no_default_bounds]
+        // type RuntimeCall: Parameter
+        // + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
+        // + GetDispatchInfo;
+
+
+        // type RuntimeCall: Parameter
+        // + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
+        // + GetDispatchInfo
+        // + Dispatchable<
+        //     RuntimeOrigin = Self::RuntimeOrigin,
+        //     PostInfo = PostDispatchInfo,
+        // >;
         // type RuntimeCall: Parameter + GetDispatchInfo + Dispatchable<Origin=Self::RuntimeOrigin>;
         // type RuntimeOrigin: From<RuntimeOrigin> + From<<Self as frame_system::Config>::RuntimeOrigin>;
-        type WeightInfo: WeightInfo;
+
     }
 
     #[pallet::event]
@@ -69,7 +87,7 @@ pub mod pallet {
             call: Box<<T as Config>::RuntimeCall>,
             // call: <T as pallet::Config>::RuntimeCall,
         ) -> DispatchResultWithPostInfo {
-            let _sender = ensure_signed(origin.clone())?;
+            // let _sender = ensure_signed(origin.clone())?;
 
             // let _res = call.dispatch_bypass_filter(origin).map_err(|e| e.error)?;
             let _res = call.dispatch(origin);

@@ -2731,6 +2731,7 @@ dependencies = [
  "pallet-grandpa",
  "pallet-identity",
  "pallet-membership",
+ "pallet-middleware",
  "pallet-nfts",
  "pallet-preimage",
  "pallet-scheduler",
@@ -5000,6 +5001,16 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std 14.0.0 (git+https://github.com/paritytech/polkadot-sdk.git?branch=release-polkadot-v1.7.0)",
+]
+
+[[package]]
+name = "pallet-middleware"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
 ]
 
 [[package]]

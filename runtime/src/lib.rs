@@ -524,6 +524,10 @@ impl pallet_democracy::Config for Runtime {
 }
 
 
+impl pallet_middleware::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+}
+
 construct_runtime!(
     pub enum Runtime {
         System: frame_system,
@@ -542,6 +546,7 @@ construct_runtime!(
         Treasury: pallet_treasury,
         Nfts: pallet_nfts,
         Democracy: pallet_democracy,
+        Middleware: pallet_middleware,
     }
 );
 

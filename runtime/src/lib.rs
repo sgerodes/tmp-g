@@ -2,6 +2,9 @@
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
 
+// use pallet_identity::legacy::IdentityInfo;
+mod g6_identity_info;
+
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
     construct_runtime, derive_impl, parameter_types,
@@ -26,8 +29,7 @@ pub use frame_system::Call as SystemCall;
 use frame_system::EnsureRoot;
 pub use pallet_balances::Call as BalancesCall;
 use pallet_grandpa::AuthorityId as GrandpaId;
-use pallet_identity::legacy::IdentityInfo;
-/// Import the template pallet.
+use g6_identity_info::IdentityInfo;
 pub use pallet_template;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier};
@@ -267,6 +269,7 @@ parameter_types! {
     pub const MaxSuffixLength: u32 = 30;
     pub const MaxUsernameLength: u32 = 50;
 }
+
 
 impl pallet_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;

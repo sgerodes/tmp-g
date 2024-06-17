@@ -26,7 +26,7 @@ pub use frame_system::Call as SystemCall;
 use frame_system::EnsureRoot;
 pub use pallet_balances::Call as BalancesCall;
 use pallet_grandpa::AuthorityId as GrandpaId;
-use pallet_identity::legacy::IdentityInfo;
+// use pallet_identity::legacy::IdentityInfo;
 /// Import the template pallet.
 pub use pallet_template;
 pub use pallet_timestamp::Call as TimestampCall;
@@ -267,6 +267,9 @@ parameter_types! {
     pub const MaxSuffixLength: u32 = 30;
     pub const MaxUsernameLength: u32 = 50;
 }
+
+mod types;
+use types::IdentityInfo;
 
 impl pallet_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;

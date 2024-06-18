@@ -2,7 +2,6 @@
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
 
-// use pallet_identity::legacy::IdentityInfo;
 mod g6_identity_info;
 
 // A few exports that help ease life for downstream crates.
@@ -30,6 +29,7 @@ use frame_system::EnsureRoot;
 pub use pallet_balances::Call as BalancesCall;
 use pallet_grandpa::AuthorityId as GrandpaId;
 use g6_identity_info::IdentityInfo;
+// use pallet_identity::legacy::IdentityInfo;
 pub use pallet_template;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier};
@@ -280,8 +280,7 @@ impl pallet_identity::Config for Runtime {
     type MaxSubAccounts = ConstU32<100>;
     type IdentityInformation = IdentityInfo<ConstU32<100>>;
     type MaxRegistrars = ConstU32<20>;
-    type Slashed = ();
-    // type Slashed = Treasury;
+    type Slashed = Treasury;
     type ForceOrigin = EnsureRoot<AccountId>;
     type RegistrarOrigin = EnsureRoot<AccountId>;
     type OffchainSignature = MultiSignature;

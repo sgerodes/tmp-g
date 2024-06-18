@@ -163,3 +163,121 @@ impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
     }
 }
 
+use frame_support::pallet_prelude::BuildGenesisConfig;
+use frame_support::traits::GenesisBuild;
+// use serde::{Deserialize, Serialize};
+use sp_runtime::serde::{Deserialize, Serialize};
+use sp_runtime::traits::StaticLookup;
+
+const SEED: u32 = 0;
+
+#[derive(Default, Serialize, Deserialize)]
+#[serde(bound = "T: frame_system::Config")]
+pub struct IdentityGenesisConfig<T: frame_system::Config> {
+    pub registrars: Vec<T::AccountId>,
+}
+
+
+impl<T: pallet_identity::Config> BuildGenesisConfig for IdentityGenesisConfig<T> {
+    fn build(&self) {
+        for registrar in &self.registrars {
+            let registrar_lookup = T::Lookup::unlookup(registrar.clone());
+            pallet_identity::Pallet::<T>::add_registrar(frame_system::RawOrigin::Root.into(), registrar)
+                .expect("Failed to add registrar");
+        }
+    }
+}
+
+// impl<T: pallet_identity::Config> GenesisBuild<T> for IdentityGenesisConfig {
+//     fn build(&self) {
+//         for registrar in &self.registrars {
+//             pallet_identity::Pallet::<T>::add_registrar(frame_system::RawOrigin::Root.into(), registrar.clone());
+//         }
+//     }
+// }
+
+
+// impl pallet_identity::GenesisConfig<Runtime> for IdentityGenesisConfig {
+//     fn build(&self) {
+//         for (account_id, registrar) in &self.registrars {
+//             // pallet_identity::Registrars::<Runtime>::append(registrar.clone());
+//             // // Here we assume registrar ID starts from 0 and increments by 1 for each registrar
+//             // let registrar_count = pallet_identity::Registrars::<Runtime>::decode_len().unwrap_or(0);
+//             // let registrar_index = registrar_count as u32;
+//             // pallet_identity::Pallet::<Runtime>::add_registrar(account_id.clone(), registrar_index);
+//             pallet_identity::add_registrar()
+//         }
+//     }
+// }
+
+
+// #[benchmark]
+// fn reap_identity(
+//     r: Linear<0, { T::MaxRegistrars::get() }>,
+//     s: Linear<0, { T::MaxSubAccounts::get() }>,
+// ) -> Result<(), BenchmarkError> {
+//     // set up target
+//     let target: T::AccountId = account("target", 0, SEED);
+//     let target_origin =
+//         <T as frame_system::Config>::RuntimeOrigin::from(RawOrigin::Signed(target.clone()));
+//     let target_lookup = T::Lookup::unlookup(target.clone());
+//     let _ = T::Currency::make_free_balance_be(&target, BalanceOf::<T>::max_value());
+//
+//     // set identity
+//     let info = <T as pallet_identity::Config>::IdentityInformation::create_identity_info();
+//     Identity::<T>::set_identity(
+//         RawOrigin::Signed(target.clone()).into(),
+//         Box::new(info.clone()),
+//     )?;
+//
+//     // create and set subs
+//     let mut subs = Vec::new();
+//     let data = Data::Raw(vec![0; 32].try_into().unwrap());
+//     for ii in 0..s {
+//         let sub_account = account("sub", ii, SEED);
+//         subs.push((sub_account, data.clone()));
+//     }
+//     Identity::<T>::set_subs(target_origin.clone(), subs.clone())?;
+//
+//     // add registrars and provide judgements
+//     let registrar_origin = T::RegistrarOrigin::try_successful_origin()
+//         .expect("RegistrarOrigin has no successful origin required for the benchmark");
+//     for ii in 0..r {
+//         // registrar account
+//         let registrar: T::AccountId = account("registrar", ii, SEED);
+//         let registrar_lookup = T::Lookup::unlookup(registrar.clone());
+//         let _ = <T as pallet_identity::Config>::Currency::make_free_balance_be(
+//             &registrar,
+//             <T as pallet_identity::Config>::Currency::minimum_balance(),
+//         );
+//
+//         // add registrar
+//         Identity::<T>::add_registrar(registrar_origin.clone(), registrar_lookup)?;
+//         Identity::<T>::set_fee(RawOrigin::Signed(registrar.clone()).into(), ii, 10u32.into())?;
+//         let fields = <T as pallet_identity::Config>::IdentityInformation::all_fields();
+//         Identity::<T>::set_fields(RawOrigin::Signed(registrar.clone()).into(), ii, fields)?;
+//
+//         // request and provide judgement
+//         Identity::<T>::request_judgement(target_origin.clone(), ii, 10u32.into())?;
+//         Identity::<T>::provide_judgement(
+//             RawOrigin::Signed(registrar).into(),
+//             ii,
+//             target_lookup.clone(),
+//             Judgement::Reasonable,
+//             <T as frame_system::Config>::Hashing::hash_of(&info),
+//         )?;
+//     }
+//
+//     let origin = T::Reaper::try_successful_origin().map_err(|_| BenchmarkError::Weightless)?;
+//
+//     #[extrinsic_call]
+//     _(origin as T::RuntimeOrigin, target.clone());
+//
+//     assert_last_event::<T>(Event::<T>::IdentityReaped { who: target.clone() }.into());
+//
+//     let fields = <T as pallet_identity::Config>::IdentityInformation::all_fields();
+//     assert!(!Identity::<T>::has_identity(&target, fields));
+//     assert_eq!(Identity::<T>::subs(&target).len(), 0);
+//
+//     Ok(())
+// }

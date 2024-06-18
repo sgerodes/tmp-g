@@ -21,6 +21,7 @@ pub enum IdentityField {
     Email,
     Address,
     TelephoneNumber,
+    Bio
 }
 
 impl TypeInfo for IdentityField {
@@ -35,6 +36,7 @@ impl TypeInfo for IdentityField {
                 .variant("Email", |v| v.index(3))
                 .variant("Address", |v| v.index(4))
                 .variant("TelephoneNumber", |v| v.index(5))
+                .variant("Bio", |v| v.index(6))
         )
     }
 }
@@ -83,6 +85,8 @@ pub struct IdentityInfo<FieldLimit: Get<u32>> {
     pub address: Data,
 
     pub telephone_number: Data,
+
+    pub bio: Data,
 }
 
 impl<FieldLimit: Get<u32> + 'static> IdentityInformationProvider for IdentityInfo<FieldLimit> {
@@ -106,6 +110,7 @@ impl<FieldLimit: Get<u32> + 'static> IdentityInformationProvider for IdentityInf
             email: data.clone(),
             address: data.clone(),
             telephone_number: data.clone(),
+            bio: data.clone(),
         }
     }
 
@@ -125,6 +130,7 @@ impl<FieldLimit: Get<u32>> Default for IdentityInfo<FieldLimit> {
             email: Data::None,
             address: Data::None,
             telephone_number: Data::None,
+            bio: Data::None,
         }
     }
 }
@@ -149,6 +155,9 @@ impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
         }
         if !self.telephone_number.is_none() {
             res.insert(IdentityField::TelephoneNumber);
+        }
+        if !self.bio.is_none() {
+            res.insert(IdentityField::Bio);
         }
         res
     }

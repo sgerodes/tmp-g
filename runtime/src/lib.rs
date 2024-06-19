@@ -3,6 +3,7 @@
 #![recursion_limit = "256"]
 
 mod g6_identity_info;
+// mod define_identity_info;
 
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
@@ -29,7 +30,7 @@ use frame_system::EnsureRoot;
 pub use pallet_balances::Call as BalancesCall;
 use pallet_grandpa::AuthorityId as GrandpaId;
 use g6_identity_info::IdentityInfo;
-// use pallet_identity::legacy::IdentityInfo;
+// use define_identity_info::IdentityInfo;
 pub use pallet_template;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier};

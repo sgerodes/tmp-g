@@ -163,30 +163,31 @@ impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
     }
 }
 
-use frame_support::pallet_prelude::BuildGenesisConfig;
-use frame_support::traits::GenesisBuild;
-// use serde::{Deserialize, Serialize};
-use sp_runtime::serde::{Deserialize, Serialize};
-use sp_runtime::traits::StaticLookup;
-
-const SEED: u32 = 0;
-
-#[derive(Default, Serialize, Deserialize)]
-#[serde(bound = "T: frame_system::Config")]
-pub struct IdentityGenesisConfig<T: frame_system::Config> {
-    pub registrars: Vec<T::AccountId>,
-}
-
-
-impl<T: pallet_identity::Config> BuildGenesisConfig for IdentityGenesisConfig<T> {
-    fn build(&self) {
-        for registrar in &self.registrars {
-            let registrar_lookup = T::Lookup::unlookup(registrar.clone());
-            pallet_identity::Pallet::<T>::add_registrar(frame_system::RawOrigin::Root.into(), registrar)
-                .expect("Failed to add registrar");
-        }
-    }
-}
+// use frame_support::pallet_prelude::BuildGenesisConfig;
+// use frame_support::traits::GenesisBuild;
+// // use serde::{Deserialize, Serialize};
+// use sp_runtime::serde::{Deserialize, Serialize};
+// use sp_runtime::traits::StaticLookup;
+//
+// const SEED: u32 = 0;
+//
+// #[derive(Default, Serialize, Deserialize)]
+// #[serde(bound = "T: frame_system::Config")]
+// pub struct IdentityGenesisConfig<T: frame_system::Config> {
+//     pub registrars: Vec<T::AccountId>,
+// }
+//
+//
+// impl<T: pallet_identity::Config> BuildGenesisConfig for IdentityGenesisConfig<T> {
+//     fn build(&self) {
+//         for registrar in &self.registrars {
+//             let registrar_lookup = T::Lookup::unlookup(registrar.clone());
+//             Identity::<T>::add_registrar(frame_system::RawOrigin::Root.into(), registrar_lookup).expect("Failed to add registrar");
+//
+//             // pallet_identity::Pallet::<T>::add_registrar(frame_system::RawOrigin::Root.into(), registrar).expect("Failed to add registrar");
+//         }
+//     }
+// }
 
 // impl<T: pallet_identity::Config> GenesisBuild<T> for IdentityGenesisConfig {
 //     fn build(&self) {

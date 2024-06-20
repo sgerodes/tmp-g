@@ -119,7 +119,6 @@ pub use types::{
 };
 pub use weights::WeightInfo;
 use frame_system::RawOrigin;
-use frame_support::traits::GenesisBuild;
 
 
 type BalanceOf<T> =
@@ -206,11 +205,18 @@ pub mod pallet {
 	}
 
 	#[pallet::genesis_config]
-	// #[derive(Default)]
-	#[derive(frame_support::DefaultNoBound)]
+	// #[derive(frame_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub registrars: Option<Vec<T::AccountId>>,
 	}
+
+	#[cfg(feature = "std")]
+	impl<T: Config> Default for GenesisConfig<T> {
+		fn default() -> Self {
+			Self { registrars: Default::default() }
+		}
+	}
+
 
 	#[pallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {

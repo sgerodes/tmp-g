@@ -163,6 +163,27 @@ impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
     }
 }
 
+
+// use frame_support::pallet_prelude::BuildGenesisConfig;
+// use sp_runtime::traits::StaticLookup;
+// use sp_runtime::serde::{Deserialize, Serialize};
+//
+// #[derive(Default, Serialize, Deserialize)]
+// #[serde(bound = "T: frame_system::Config")]
+// pub struct MyPalletGenesisConfig<T: frame_system::Config> {
+//     pub registrars: Vec<T::AccountId>,
+// }
+//
+// impl<T: pallet_identity::Config> BuildGenesisConfig for MyPalletGenesisConfig<T> {
+//     fn build(&self) {
+//         for registrar in &self.registrars {
+//             let registrar_lookup = T::Lookup::unlookup(registrar.clone());
+//             pallet_identity::Pallet::<T>::add_registrar(frame_system::RawOrigin::Root.into(), registrar_lookup)
+//                 .expect("Failed to add registrar");
+//         }
+//     }
+// }
+
 // use frame_support::pallet_prelude::BuildGenesisConfig;
 // use frame_support::traits::GenesisBuild;
 // // use serde::{Deserialize, Serialize};

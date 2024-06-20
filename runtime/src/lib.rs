@@ -284,6 +284,7 @@ impl pallet_identity::Config for Runtime {
     type Slashed = Treasury;
     type ForceOrigin = EnsureRoot<AccountId>;
     type RegistrarOrigin = EnsureRoot<AccountId>;
+    // type RegistrarOrigin = EnsureSigned<AccountId>;
     type OffchainSignature = MultiSignature;
     type SigningPublicKey = <Signature as sp_runtime::traits::Verify>::Signer;
     type UsernameAuthorityOrigin = EnsureRoot<AccountId>;

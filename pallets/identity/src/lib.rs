@@ -118,6 +118,9 @@ pub use types::{
 	Data, IdentityInformationProvider, Judgement, RegistrarIndex, RegistrarInfo, Registration,
 };
 pub use weights::WeightInfo;
+use frame_system::RawOrigin;
+use frame_support::traits::GenesisBuild;
+
 
 type BalanceOf<T> =
 	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
@@ -201,6 +204,25 @@ pub mod pallet {
 		/// Weight information for extrinsics in this pallet.
 		type WeightInfo: WeightInfo;
 	}
+
+	#[pallet::genesis_config]
+	// #[derive(Default)]
+	#[derive(frame_support::DefaultNoBound)]
+	pub struct GenesisConfig<T: Config> {
+		pub registrars: Option<Vec<T::AccountId>>,
+	}
+
+	#[pallet::genesis_build]
+	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
+		fn build(&self) {
+			if let Some(registrars) = &self.registrars {
+				for account in registrars {
+					<Pallet<T>>::add_registrar(RawOrigin::Root.into(), T::Lookup::unlookup(account.clone())).unwrap();
+				}
+			}
+		}
+	}
+
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 

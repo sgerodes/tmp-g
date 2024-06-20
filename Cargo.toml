@@ -60,8 +60,8 @@ frame-try-runtime = { git = "https://github.com/paritytech/polkadot-sdk.git", br
 futures = { version = "0.3.21", features = ["thread-pool"] }
 jsonrpsee = { version = "0.20.3", features = ["server"] }
 
-#pallet-identity = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
-pallet-identity = { path = "./pallets/identity", default-features = false  }
+pallet-identity = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
+#pallet-identity = { path = "./pallets/identity", default-features = false  }
 
 pallet-aura = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-balances = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }

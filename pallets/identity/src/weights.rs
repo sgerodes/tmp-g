@@ -75,6 +75,7 @@ pub trait WeightInfo {
 	fn remove_expired_approval() -> Weight;
 	fn set_primary_username() -> Weight;
 	fn remove_dangling_username() -> Weight;
+	fn emit_identity_hash() -> Weight;
 }
 
 /// Weights for pallet_identity using the Substrate node and recommended hardware.
@@ -446,6 +447,16 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 			.saturating_add(T::DbWeight::get().reads(2))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
+	/// Storage: Identity IdentityOf (r:1 w:0)
+	/// Proof: Identity IdentityOf (max_values: None, max_size: Some(7538), added: 10013, mode: MaxEncodedLen)
+	fn emit_identity_hash() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `100`
+		//  Estimated: `11003`
+		// Minimum execution time: 10_000_000 picoseconds.
+		Weight::from_parts(10_000_000, 11003)
+			.saturating_add(T::DbWeight::get().reads(1_u64))
+	}
 }
 
 // For backwards compatibility and tests
@@ -815,5 +826,15 @@ impl WeightInfo for () {
 			.saturating_add(Weight::from_parts(0, 11037))
 			.saturating_add(RocksDbWeight::get().reads(2))
 			.saturating_add(RocksDbWeight::get().writes(1))
+	}
+	/// Storage: Identity IdentityOf (r:1 w:0)
+	/// Proof: Identity IdentityOf (max_values: None, max_size: Some(7538), added: 10013, mode: MaxEncodedLen)
+	fn emit_identity_hash() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `100`
+		//  Estimated: `11003`
+		// Minimum execution time: 10_000_000 picoseconds.
+		Weight::from_parts(10_000_000, 11003)
+			.saturating_add(RocksDbWeight::get().reads(1_u64))
 	}
 }

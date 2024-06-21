@@ -420,6 +420,8 @@ pub mod pallet {
 		/// A dangling username (as in, a username corresponding to an account that has removed its
 		/// identity) has been removed.
 		DanglingUsernameRemoved { who: T::AccountId, username: Username<T> },
+		/// An identity hash was emitted.
+		IdentityHashEmitted { who: T::AccountId, hash: T::Hash },
 	}
 
 	#[pallet::call]
@@ -1219,6 +1221,38 @@ pub mod pallet {
 			ensure!(!IdentityOf::<T>::contains_key(&who), Error::<T>::InvalidUsername);
 			Self::deposit_event(Event::DanglingUsernameRemoved { who: who.clone(), username });
 			Ok(Pays::No.into())
+		}
+
+
+		/// Returns the identity has to be used in the provide_judgement extrinsic
+		///
+		/// The dispatch origin for this call must be _Signed_ and the sender must be the account
+		/// of the registrar whose index is `reg_index`.
+		///
+		/// - `reg_index`: the index of the registrar whose judgement is being made.
+		/// - `target`: the account whose identity the judgement is upon. This must be an account
+		///   with a registered identity.
+		/// - `judgement`: the judgement of the registrar of index `reg_index` about `target`.
+		/// - `identity`: The hash of the [`IdentityInformationProvider`] for that the judgement is
+		///   provided.
+		///
+		/// Note: Judgements do not apply to a username.
+		///
+		/// Emits `JudgementGiven` if successful.
+		#[pallet::call_index(22)]
+		#[pallet::weight(T::WeightInfo::emit_identity_hash())]
+		pub fn emit_identity_hash(
+			origin: OriginFor<T>,
+			target: AccountIdLookupOf<T>,
+		) -> DispatchResultWithPostInfo {
+			// TODO allow only registrars
+			let sender = ensure_signed(origin)?;
+			let target = T::Lookup::lookup(target)?;
+			let (id, _) =
+				<IdentityOf<T>>::get(&target).ok_or(Error::<T>::InvalidTarget)?;
+			let identity_hash = T::Hashing::hash_of(&id.info);
+			Self::deposit_event(Event::IdentityHashEmitted { who: target.clone(), hash: identity_hash });
+			Ok(Some(T::WeightInfo::emit_identity_hash()).into())
 		}
 	}
 }

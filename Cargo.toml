@@ -5,7 +5,7 @@ resolver = "2"
 [workspace.package]
 version = "0.1.0"
 homepage = "https://g6.network/"
-authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
+authors = ["The G6 Team<https://www.g6.network/>", "Sergey Gerodes <https://sergeygerodes.xyz>"]
 license = "XXX"                # TODO There is no SPDX abbreviation for "all rights reserved" proprietary license!
 repository = "https://g.g6.network/g6-chain/solo-chain"
 edition = "2021"

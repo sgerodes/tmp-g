@@ -204,30 +204,27 @@ pub mod pallet {
 		type WeightInfo: WeightInfo;
 	}
 
-	// #[pallet::genesis_config]
-	// // #[derive(frame_support::DefaultNoBound)]
-	// pub struct GenesisConfig<T: Config> {
-	// 	pub registrars: Option<Vec<T::AccountId>>,
-	// }
-	//
-	// #[cfg(feature = "std")]
-	// impl<T: Config> Default for GenesisConfig<T> {
-	// 	fn default() -> Self {
-	// 		Self { registrars: Default::default() }
-	// 	}
-	// }
-	//
-	//
-	// #[pallet::genesis_build]
-	// impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
-	// 	fn build(&self) {
-	// 		if let Some(registrars) = &self.registrars {
-	// 			for account in registrars {
-	// 				<Pallet<T>>::add_registrar(RawOrigin::Root.into(), T::Lookup::unlookup(account.clone())).unwrap();
-	// 			}
-	// 		}
-	// 	}
-	// }
+	#[pallet::genesis_config]
+	pub struct GenesisConfig<T: Config> {
+		pub registrars: Option<Vec<T::AccountId>>,
+	}
+
+	impl<T: Config> Default for GenesisConfig<T> {
+		fn default() -> Self {
+			Self { registrars: Default::default() }
+		}
+	}
+
+	#[pallet::genesis_build]
+	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
+		fn build(&self) {
+			if let Some(registrars) = &self.registrars {
+				for account in registrars {
+					<Pallet<T>>::add_registrar(RawOrigin::Root.into(), T::Lookup::unlookup(account.clone())).unwrap();
+				}
+			}
+		}
+	}
 
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);

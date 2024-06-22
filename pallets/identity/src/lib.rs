@@ -1243,7 +1243,7 @@ pub mod pallet {
 			target: AccountIdLookupOf<T>,
 		) -> DispatchResultWithPostInfo {
 			// TODO allow only registrars
-			let sender = ensure_signed(origin)?;
+			let _sender = ensure_signed(origin)?;
 			let target = T::Lookup::lookup(target)?;
 			let (id, _) =
 				<IdentityOf<T>>::get(&target).ok_or(Error::<T>::InvalidTarget)?;

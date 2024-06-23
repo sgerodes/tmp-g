@@ -147,7 +147,6 @@ fn testnet_genesis(
 			"registrars": initial_identity_registrars,
 		},
 		"sudo": {
-			// Assign network admin rights.
 			"key": Some(root_key),
 		},
 	})

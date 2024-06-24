@@ -1,5 +1,5 @@
 [workspace]
-members = ["node", "pallets/template", "runtime"]
+members = ["node", "pallets/feeless", "pallets/feeless-playground", "pallets/template", "runtime"]
 resolver = "2"
 
 [workspace.package]
@@ -44,7 +44,9 @@ default_constructed_unit_structs = { level = "allow", priority = 2 } # stylistic
 [workspace.dependencies]
 g6-solo-runtime = { path = "./runtime" }
 g6-solo-node = { path = "./node" }
-pallet-template = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
+pallet-feeless-playground = { path = "./pallets/feeless-playground", default-features = false }
+#pallet-template = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
+pallet-template = { path = "./pallets/template", default-features = false }
 
 clap = { version = "4.4.18", features = ["derive"] }
 codec = { package = "parity-scale-codec", version = "3.6.1", default-features = false, features = ["derive"] }

@@ -2,6 +2,9 @@
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
 
+mod g6_identity_info;
+// mod define_identity_info;
+
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
     construct_runtime, derive_impl, parameter_types,
@@ -26,8 +29,8 @@ pub use frame_system::Call as SystemCall;
 use frame_system::EnsureRoot;
 pub use pallet_balances::Call as BalancesCall;
 use pallet_grandpa::AuthorityId as GrandpaId;
-use pallet_identity::legacy::IdentityInfo;
-/// Import the template pallet.
+use g6_identity_info::IdentityInfo;
+// use define_identity_info::IdentityInfo;
 pub use pallet_template;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier};
@@ -268,6 +271,7 @@ parameter_types! {
     pub const MaxUsernameLength: u32 = 50;
 }
 
+
 impl pallet_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type Currency = Balances;
@@ -277,10 +281,10 @@ impl pallet_identity::Config for Runtime {
     type MaxSubAccounts = ConstU32<100>;
     type IdentityInformation = IdentityInfo<ConstU32<100>>;
     type MaxRegistrars = ConstU32<20>;
-    type Slashed = ();
-    // type Slashed = Treasury;
+    type Slashed = Treasury;
     type ForceOrigin = EnsureRoot<AccountId>;
     type RegistrarOrigin = EnsureRoot<AccountId>;
+    // type RegistrarOrigin = EnsureSigned<AccountId>;
     type OffchainSignature = MultiSignature;
     type SigningPublicKey = <Signature as sp_runtime::traits::Verify>::Signer;
     type UsernameAuthorityOrigin = EnsureRoot<AccountId>;
@@ -528,6 +532,13 @@ impl pallet_middleware::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
 }
 
+impl pallet_feeless_playground::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type RuntimeCall = RuntimeCall;
+    type WeightInfo = pallet_feeless_playground::weights::SubstrateWeight<Runtime>;
+}
+
+
 construct_runtime!(
     pub enum Runtime {
         System: frame_system,
@@ -547,6 +558,7 @@ construct_runtime!(
         Nfts: pallet_nfts,
         Democracy: pallet_democracy,
         Middleware: pallet_middleware,
+        FeelessPlaground: pallet_feeless_playground,
     }
 );
 

@@ -71,6 +71,11 @@ pub fn development_config() -> Result<ChainSpec, String> {
 			get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
 			get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
 		],
+		// Initial identity registrars
+		vec![
+			get_account_id_from_seed::<sr25519::Public>("Alice"),
+			get_account_id_from_seed::<sr25519::Public>("Charlie"),
+		],
 		true,
 	))
 	.with_properties(properties)
@@ -108,17 +113,22 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 			get_account_id_from_seed::<sr25519::Public>("Eve//stash"),
 			get_account_id_from_seed::<sr25519::Public>("Ferdie//stash"),
 		],
+		// Initial identity registrars
+		vec![
+			get_account_id_from_seed::<sr25519::Public>("Alice"),
+			get_account_id_from_seed::<sr25519::Public>("Charlie"),
+		],
 		true,
 	))
 	.with_properties(properties)
 	.build())
 }
 
-/// Configure initial storage state for FRAME modules.
 fn testnet_genesis(
 	initial_authorities: Vec<(AuraId, GrandpaId)>,
 	root_key: AccountId,
 	endowed_accounts: Vec<AccountId>,
+	initial_identity_registrars: Vec<AccountId>,
 	_enable_println: bool,
 ) -> serde_json::Value {
 	let initial_balance: u128 = GENESIS_SUPPLY * 10u128.pow(TOKEN_DECIMALS.into());
@@ -133,8 +143,10 @@ fn testnet_genesis(
 		"grandpa": {
 			"authorities": initial_authorities.iter().map(|x| (x.1.clone(), 1)).collect::<Vec<_>>(),
 		},
+		"identity": {
+			"registrars": initial_identity_registrars,
+		},
 		"sudo": {
-			// Assign network admin rights.
 			"key": Some(root_key),
 		},
 	})

@@ -1,11 +1,11 @@
 [workspace]
-members = ["node", "pallets/template", "runtime"]
+members = ["node", "pallets/feeless", "pallets/feeless-playground", "pallets/template", "runtime"]
 resolver = "2"
 
 [workspace.package]
 version = "0.1.0"
 homepage = "https://g6.network/"
-authors = ["The G6 Team", "Sergey Gerodes <https://sergeygerodes.xyz>", "Substrate DevHub <https://github.com/substrate-developer-hub>"]
+authors = ["The G6 Team<https://www.g6.network/>", "Sergey Gerodes <https://sergeygerodes.xyz>"]
 license = "XXX"                # TODO There is no SPDX abbreviation for "all rights reserved" proprietary license!
 repository = "https://g.g6.network/g6-chain/solo-chain"
 edition = "2021"
@@ -47,6 +47,9 @@ g6-solo-node = { path = "./node" }
 pallet-template = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-middleware = { path = "./pallets/middleware", default-features = false }
 
+pallet-feeless-playground = { path = "./pallets/feeless-playground", default-features = false }
+#pallet-template = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
+pallet-template = { path = "./pallets/template", default-features = false }
 
 clap = { version = "4.4.18", features = ["derive"] }
 codec = { package = "parity-scale-codec", version = "3.6.1", default-features = false, features = ["derive"] }
@@ -62,6 +65,9 @@ frame-try-runtime = { git = "https://github.com/paritytech/polkadot-sdk.git", br
 futures = { version = "0.3.21", features = ["thread-pool"] }
 jsonrpsee = { version = "0.20.3", features = ["server"] }
 
+#pallet-identity = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
+pallet-identity = { path = "./pallets/identity", default-features = false  }
+
 pallet-aura = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-balances = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-democracy = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
@@ -71,7 +77,6 @@ pallet-scheduler = { git = "https://github.com/paritytech/polkadot-sdk.git", bra
 pallet-bounties = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-preimage = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-grandpa = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
-pallet-identity = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-collective = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-membership = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 pallet-sudo = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
@@ -106,6 +111,7 @@ sp-genesis-builder = { default-features = false, git = "https://github.com/parit
 sp-inherents = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 sp-io = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0" }
 sp-keyring = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0" }
+sp-keystore = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0" }
 sp-offchain = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }
 sp-runtime = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false, features = ["serde"] }
 sp-session = { git = "https://github.com/paritytech/polkadot-sdk.git", branch = "release-polkadot-v1.7.0", default-features = false }

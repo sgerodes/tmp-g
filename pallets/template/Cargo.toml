@@ -1,5 +1,5 @@
 [package]
-name = "g6-solo-pallet"
+name = "pallet-template"
 description = "G6 Solo Chain FRAME pallets with custom runtime logic."
 publish = false
 version.workspace = true

@@ -9,17 +9,17 @@ use frame_system::RawOrigin;
 
 #[benchmarks]
 mod benchmarks {
-	use super::*;
+    use super::*;
 
-	#[benchmark]
-	fn do_something() {
-		let value = 100u32.into();
-		let caller: T::AccountId = whitelisted_caller();
-		#[extrinsic_call]
-		do_something(RawOrigin::Signed(caller), value);
+    #[benchmark]
+    fn do_something() {
+        let value = 100u32.into();
+        let caller: T::AccountId = whitelisted_caller();
+        #[extrinsic_call]
+        do_something(RawOrigin::Signed(caller), value);
 
-		assert_eq!(Something::<T>::get(), Some(value));
-	}
+        assert_eq!(Something::<T>::get(), Some(value));
+    }
 
-	impl_benchmark_test_suite!(Template, crate::mock::new_test_ext(), crate::mock::Test);
+    impl_benchmark_test_suite!(Template, crate::mock::new_test_ext(), crate::mock::Test);
 }

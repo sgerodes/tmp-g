@@ -7,7 +7,6 @@ mod benchmarking;
 pub mod weights;
 pub use weights::*;
 
-
 #[frame_support::pallet(dev_mode)]
 pub mod pallet {
     use super::*;
@@ -26,12 +25,12 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        DummyEvent // TODO change this
+        DummyEvent, // TODO change this
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        DummyError // TODO change this
+        DummyError, // TODO change this
     }
 
     #[pallet::call]
@@ -43,6 +42,5 @@ pub mod pallet {
             Self::deposit_event(Event::DummyEvent);
             Ok(())
         }
-
     }
 }

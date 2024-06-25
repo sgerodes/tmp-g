@@ -6,9 +6,13 @@ mod g6_identity_info;
 // mod define_identity_info;
 
 // A few exports that help ease life for downstream crates.
+use frame_support::genesis_builder_helper::{build_config, create_default_config};
+use frame_support::traits::tokens::PayFromAccount;
+use frame_support::traits::tokens::UnityAssetBalanceConversion;
+use frame_support::traits::EqualPrivilegeOnly;
+use frame_support::PalletId;
 pub use frame_support::{
     construct_runtime, derive_impl, parameter_types,
-    StorageValue,
     traits::{
         ConstBool, ConstU128, ConstU32, ConstU64, ConstU8, KeyOwnerProofSystem, Randomness,
         StorageInfo,
@@ -19,17 +23,13 @@ pub use frame_support::{
         },
         IdentityFee, Weight,
     },
+    StorageValue,
 };
-use frame_support::genesis_builder_helper::{build_config, create_default_config};
-use frame_support::PalletId;
-use frame_support::traits::EqualPrivilegeOnly;
-use frame_support::traits::tokens::PayFromAccount;
-use frame_support::traits::tokens::UnityAssetBalanceConversion;
 pub use frame_system::Call as SystemCall;
 use frame_system::EnsureRoot;
+use g6_identity_info::IdentityInfo;
 pub use pallet_balances::Call as BalancesCall;
 use pallet_grandpa::AuthorityId as GrandpaId;
-use g6_identity_info::IdentityInfo;
 // use define_identity_info::IdentityInfo;
 pub use pallet_template;
 pub use pallet_timestamp::Call as TimestampCall;
@@ -37,18 +37,18 @@ use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier
 use sp_api::impl_runtime_apis;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
-use sp_runtime::{
-    ApplyExtrinsicResult, create_runtime_str, generic,
-    impl_opaque_keys,
-    MultiSignature,
-    traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, NumberFor, One, Verify}, transaction_validity::{TransactionSource, TransactionValidity},
-};
-pub use sp_runtime::{Perbill, Permill};
+use sp_runtime::traits::AccountIdConversion;
+use sp_runtime::traits::IdentityLookup;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 use sp_runtime::Percent;
-use sp_runtime::traits::AccountIdConversion;
-use sp_runtime::traits::IdentityLookup;
+use sp_runtime::{
+    create_runtime_str, generic, impl_opaque_keys,
+    traits::{BlakeTwo256, Block as BlockT, IdentifyAccount, NumberFor, One, Verify},
+    transaction_validity::{TransactionSource, TransactionValidity},
+    ApplyExtrinsicResult, MultiSignature,
+};
+pub use sp_runtime::{Perbill, Permill};
 use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -271,7 +271,6 @@ parameter_types! {
     pub const MaxUsernameLength: u32 = 50;
 }
 
-
 impl pallet_identity::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type Currency = Balances;
@@ -335,7 +334,6 @@ parameter_types! {
     pub const PreimageHoldReason: RuntimeHoldReason = RuntimeHoldReason::Preimage(pallet_preimage::HoldReason::Preimage);
 }
 
-
 impl pallet_preimage::Config for Runtime {
     type WeightInfo = ();
     type RuntimeEvent = RuntimeEvent;
@@ -367,7 +365,6 @@ impl pallet_scheduler::Config for Runtime {
     type OriginPrivilegeCmp = EqualPrivilegeOnly;
     type Preimages = Preimage;
 }
-
 
 parameter_types! {
     pub const TreasuryPalletId: PalletId = PalletId(*b"g6/trsry");
@@ -436,10 +433,9 @@ impl pallet_bounties::Config for Runtime {
     type ChildBountyManager = ();
 }
 
-
 use frame_system::EnsureSigned;
-use sp_runtime::traits;
 use pallet_nfts::PalletFeatures;
+use sp_runtime::traits;
 
 parameter_types! {
     pub Features: PalletFeatures = PalletFeatures::all_enabled();
@@ -484,7 +480,6 @@ impl pallet_nfts::Config for Runtime {
     type Locker = ();
 }
 
-
 parameter_types! {
     pub const LaunchPeriod: BlockNumber = 5 * DAYS;
     pub const VotingPeriod: BlockNumber = 5 * DAYS;
@@ -527,7 +522,6 @@ impl pallet_democracy::Config for Runtime {
     type Slash = Treasury;
 }
 
-
 impl pallet_middleware::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
 }
@@ -537,7 +531,6 @@ impl pallet_feeless_playground::Config for Runtime {
     type RuntimeCall = RuntimeCall;
     type WeightInfo = pallet_feeless_playground::weights::SubstrateWeight<Runtime>;
 }
-
 
 construct_runtime!(
     pub enum Runtime {
@@ -580,7 +573,6 @@ pub type SignedExtra = (
     pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 );
 
-
 /// All migrations of the runtime, aside from the ones declared in the pallets.
 ///
 /// This can be a tuple of types, each implementing `OnRuntimeUpgrade`.
@@ -589,7 +581,7 @@ type Migrations = ();
 
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic =
-generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, SignedExtra>;
+    generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, SignedExtra>;
 /// The payload being signed in transactions.
 pub type SignedPayload = generic::SignedPayload<RuntimeCall, SignedExtra>;
 /// Executive: handles dispatch to the various modules.

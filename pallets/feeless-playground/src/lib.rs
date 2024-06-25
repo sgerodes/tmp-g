@@ -1,11 +1,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
 use frame_support::dispatch::GetDispatchInfo;
 use frame_support::traits::UnfilteredDispatchable;
+pub use pallet::*;
 // use frame_system::RawOrigin;
-use scale_info::prelude::boxed::Box;
 use frame_support::dispatch::PostDispatchInfo;
+use scale_info::prelude::boxed::Box;
 use sp_runtime::traits::Dispatchable;
 // use frame_support::dispatch::Dispatchable;
 
@@ -13,7 +13,6 @@ use sp_runtime::traits::Dispatchable;
 mod benchmarking;
 pub mod weights;
 pub use weights::*;
-
 
 // #[frame_support::pallet(dev_mode)]
 #[frame_support::pallet]
@@ -32,8 +31,8 @@ pub mod pallet {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         #[pallet::no_default_bounds]
         type RuntimeCall: Parameter
-        + Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
-        + From<Call<Self>>;
+            + Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
+            + From<Call<Self>>;
         type WeightInfo: WeightInfo;
 
         // #[pallet::no_default_bounds]
@@ -47,7 +46,6 @@ pub mod pallet {
         // + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
         // + GetDispatchInfo;
 
-
         // type RuntimeCall: Parameter
         // + UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
         // + GetDispatchInfo
@@ -57,24 +55,22 @@ pub mod pallet {
         // >;
         // type RuntimeCall: Parameter + GetDispatchInfo + Dispatchable<Origin=Self::RuntimeOrigin>;
         // type RuntimeOrigin: From<RuntimeOrigin> + From<<Self as frame_system::Config>::RuntimeOrigin>;
-
     }
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         DummyEvent,
-        FeelessTransaction
+        FeelessTransaction,
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        DummyError // TODO change this
+        DummyError, // TODO change this
     }
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-
         #[pallet::call_index(0)]
         #[pallet::weight(T::WeightInfo::feeless_fiesta())]
         // #[pallet::weight({
@@ -105,5 +101,4 @@ pub mod pallet {
             Ok(())
         }
     }
-
 }

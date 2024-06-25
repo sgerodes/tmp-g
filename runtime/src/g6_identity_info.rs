@@ -1,13 +1,12 @@
+use codec::{Decode, Encode, MaxEncodedLen};
 #[cfg(feature = "runtime-benchmarks")]
 use enumflags2::BitFlag;
 use enumflags2::{bitflags, BitFlags};
-use codec::{Decode, Encode, MaxEncodedLen};
 use frame_support::{traits::Get, CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound};
+use pallet_identity::{Data, IdentityInformationProvider};
 use scale_info::{build::Variants, Path, Type, TypeInfo};
 use sp_runtime::{BoundedVec, RuntimeDebug};
 use sp_std::prelude::*;
-use pallet_identity::{Data, IdentityInformationProvider};
-
 
 /// The fields that we use to identify the owner of an account with. Each corresponds to a field
 /// in the `IdentityInfo` struct.
@@ -21,23 +20,25 @@ pub enum IdentityField {
     Email,
     Address,
     TelephoneNumber,
-    Bio
+    Bio,
 }
 
 impl TypeInfo for IdentityField {
     type Identity = Self;
 
     fn type_info() -> scale_info::Type {
-        Type::builder().path(Path::new("IdentityField", module_path!())).variant(
-            Variants::new()
-                .variant("Display", |v| v.index(0))
-                .variant("FirstName", |v| v.index(1))
-                .variant("LastName", |v| v.index(2))
-                .variant("Email", |v| v.index(3))
-                .variant("Address", |v| v.index(4))
-                .variant("TelephoneNumber", |v| v.index(5))
-                .variant("Bio", |v| v.index(6))
-        )
+        Type::builder()
+            .path(Path::new("IdentityField", module_path!()))
+            .variant(
+                Variants::new()
+                    .variant("Display", |v| v.index(0))
+                    .variant("FirstName", |v| v.index(1))
+                    .variant("LastName", |v| v.index(2))
+                    .variant("Email", |v| v.index(3))
+                    .variant("Address", |v| v.index(4))
+                    .variant("TelephoneNumber", |v| v.index(5))
+                    .variant("Bio", |v| v.index(6)),
+            )
     }
 }
 
@@ -137,7 +138,6 @@ impl<FieldLimit: Get<u32>> Default for IdentityInfo<FieldLimit> {
 
 impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
     pub(crate) fn fields(&self) -> BitFlags<IdentityField> {
-
         let mut res = <BitFlags<IdentityField>>::empty();
         if !self.display.is_none() {
             res.insert(IdentityField::Display);
@@ -163,7 +163,6 @@ impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
         res
     }
 }
-
 
 // use frame_support::pallet_prelude::BuildGenesisConfig;
 // use sp_runtime::traits::StaticLookup;
@@ -219,7 +218,6 @@ impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
 //     }
 // }
 
-
 // impl pallet_identity::GenesisConfig<Runtime> for IdentityGenesisConfig {
 //     fn build(&self) {
 //         for (account_id, registrar) in &self.registrars {
@@ -232,7 +230,6 @@ impl<FieldLimit: Get<u32>> IdentityInfo<FieldLimit> {
 //         }
 //     }
 // }
-
 
 // #[benchmark]
 // fn reap_identity(

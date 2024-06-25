@@ -93,21 +93,12 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-mod benchmarking;
-pub mod legacy;
-pub mod migration;
-#[cfg(test)]
-mod tests;
-mod types;
-pub mod weights;
-
-use crate::types::{AuthorityPropertiesOf, Suffix, Username};
 use codec::Encode;
 use frame_support::{
+    BoundedVec,
     ensure,
     pallet_prelude::{DispatchError, DispatchResult},
     traits::{BalanceStatus, Currency, Get, OnUnbalanced, ReservableCurrency, StorageVersion},
-    BoundedVec,
 };
 use frame_system::RawOrigin;
 pub use pallet::*;
@@ -120,6 +111,16 @@ pub use types::{
 };
 pub use weights::WeightInfo;
 
+use crate::types::{AuthorityPropertiesOf, Suffix, Username};
+
+mod benchmarking;
+pub mod legacy;
+pub mod migration;
+#[cfg(test)]
+mod tests;
+mod types;
+pub mod weights;
+
 type BalanceOf<T> =
     <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<
@@ -129,9 +130,10 @@ type AccountIdLookupOf<T> = <<T as frame_system::Config>::Lookup as StaticLookup
 
 #[frame_support::pallet]
 pub mod pallet {
-    use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
+
+    use super::*;
 
     #[pallet::config]
     pub trait Config: frame_system::Config {

@@ -10,14 +10,12 @@ pub mod pallet {
         pallet_prelude::*,
         Parameter,
         // weights::GetDispatchInfo,
-        traits::Get,
         sp_runtime::traits::BlockNumberProvider,
-
+        traits::Get,
     };
+    use frame_support::dispatch::GetDispatchInfo;
     use frame_system::pallet_prelude::*;
     use scale_info::prelude::boxed::Box;
-
-    use frame_support::dispatch::GetDispatchInfo;
     use sp_runtime::traits::Dispatchable;
 
     #[pallet::pallet]

@@ -7,12 +7,14 @@ mod benchmarking;
 pub mod weights;
 pub use weights::*;
 
-
 #[frame_support::pallet(dev_mode)]
 pub mod pallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
+    // use frame_support::{
+    //     dispatch::{DispatchResult, DispatchResultWithPostInfo},
+    // };
 
     #[pallet::pallet]
     pub struct Pallet<T>(_);
@@ -39,10 +41,8 @@ pub mod pallet {
         StringTooLong,
     }
 
-
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-
         #[pallet::call_index(0)]
         #[pallet::weight(10_000)]
         pub fn set(origin: OriginFor<T>, user_input: u8) -> DispatchResult {
@@ -61,6 +61,14 @@ pub mod pallet {
             Ok(())
         }
 
+        // #[pallet::call_index(2)]
+        // // #[pallet::weight((T::SystemWeightInfo::set_code(), DispatchClass::Operational))]
+        // #[pallet::weight(5_000)]
+        // // pub fn upload_picture(origin: OriginFor<T>, code: Vec<u8>) -> DispatchResultWithPostInfo {
+        // pub fn upload_picture(origin: OriginFor<T>, code: Vec<u8>) -> DispatchResult {
+        //     let who = ensure_signed(origin)?;
+        // 
+        //     Ok(())
+        // }
     }
-
 }

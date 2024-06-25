@@ -41,6 +41,7 @@
 
 // Re-export pallet items so that they can be accessed from the crate namespace.
 pub use pallet::*;
+pub use weights::*;
 
 // FRAME pallets require their own "mock runtimes" to be able to run unit tests. This module
 // contains a mock runtime specific for testing this pallet's functionality.
@@ -58,15 +59,15 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 pub mod weights;
-pub use weights::*;
 
 // All pallet logic is defined in its own module and must be annotated by the `pallet` attribute.
 #[frame_support::pallet]
 pub mod pallet {
-    // Import various useful types required by all FRAME pallets.
-    use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
+
+    // Import various useful types required by all FRAME pallets.
+        use super::*;
 
     // The `Pallet` struct serves as a placeholder to implement traits, methods and dispatchables
     // (`Call`s) in this pallet.

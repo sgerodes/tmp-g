@@ -893,7 +893,7 @@ pub mod pallet {
             #[pallet::compact] reg_index: RegistrarIndex,
             target: AccountIdLookupOf<T>,
             judgement: Judgement<BalanceOf<T>>,
-            identity: T::Hash,
+            // identity: T::Hash,
         ) -> DispatchResultWithPostInfo {
             let sender = ensure_signed(origin)?;
             let target = T::Lookup::lookup(target)?;
@@ -906,9 +906,9 @@ pub mod pallet {
             let (mut id, username) =
                 <IdentityOf<T>>::get(&target).ok_or(Error::<T>::InvalidTarget)?;
 
-            if T::Hashing::hash_of(&id.info) != identity {
-                return Err(Error::<T>::JudgementForDifferentIdentity.into());
-            }
+            // if T::Hashing::hash_of(&id.info) != identity {
+            //     return Err(Error::<T>::JudgementForDifferentIdentity.into());
+            // }
 
             let item = (reg_index, judgement);
             match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {

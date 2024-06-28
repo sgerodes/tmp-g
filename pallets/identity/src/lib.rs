@@ -98,7 +98,8 @@ use frame_support::{
     BoundedVec,
     ensure,
     pallet_prelude::{DispatchError, DispatchResult},
-    traits::{BalanceStatus, Currency, Get, OnUnbalanced, ReservableCurrency, StorageVersion},
+    // traits::{BalanceStatus, Currency, Get, OnUnbalanced, ReservableCurrency, StorageVersion},
+    traits::{BalanceStatus, Currency, Get, OnUnbalanced, ReservableCurrency},
 };
 use frame_system::RawOrigin;
 pub use pallet::*;
@@ -127,6 +128,7 @@ type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<
     <T as frame_system::Config>::AccountId,
 >>::NegativeImbalance;
 type AccountIdLookupOf<T> = <<T as frame_system::Config>::Lookup as StaticLookup>::Source;
+
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -234,6 +236,7 @@ pub mod pallet {
     }
 
     const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
+    // const MAX_UNJUDGED_IDENTITIES: u32 = 1000; // TODO move this value in the config
 
     #[pallet::pallet]
     #[pallet::storage_version(STORAGE_VERSION)]
@@ -255,6 +258,38 @@ pub mod pallet {
         ),
         OptionQuery,
     >;
+
+    /// A map of account IDs that have requested a judgement but have not yet received one.
+    ///
+    /// This storage is used to keep track of all identities that are awaiting judgement from a registrar.
+    /// The key is the `AccountId` of the user who has requested the judgement.
+    /// The value is an empty tuple `()`, as the presence of the key itself indicates that the account
+    /// is awaiting judgement.
+    ///
+    /// # Storage Map
+    /// - Key: `AccountId` - The account ID of the user who has requested the judgement.
+    /// - Value: `()` - An empty tuple indicating that the account is awaiting judgement.
+    ///
+    /// # Usage
+    /// When a user requests a judgement using the `request_judgement` extrinsic, their account ID is added to this storage.
+    /// When a judgement is provided using the `provide_judgement` extrinsic, their account ID is removed from this storage.
+    #[pallet::storage]
+    #[pallet::getter(fn unjudged_identities)]
+    pub(super) type UnjudgedIdentities<T: Config> = StorageMap<_, Twox64Concat, T::AccountId, (), OptionQuery>;
+    // pub(super) type UnjudgedIdentities<T: Config> = StorageValue<
+    //     _,
+    //     BoundedVec<T::AccountId, ConstU32<MAX_UNJUDGED_IDENTITIES>>,
+    //     ValueQuery,
+    // >;
+    // pub(super) type UnjudgedIdentities<T: Config> = StorageValue<
+    //     _,
+    //     BoundedVec<
+    //         T::AccountId,
+    //         ConstU32<MAX_UNJUDGED_IDENTITIES>,
+    //     >,
+    //     ValueQuery,
+    // >;
+
 
     /// The super-identity of an alternative "sub" identity together with its name, within that
     /// context. If the account is not some other account's sub-identity, then just `None`.
@@ -385,6 +420,10 @@ pub mod pallet {
         NoUsername,
         /// The username cannot be forcefully removed because it can still be accepted.
         NotExpired,
+        // /// This error occurs when the list of unjudged identities reaches its maximum capacity,
+        // /// preventing the addition of new entries. The system enforces a limit to maintain optimal
+        // /// performance and prevent potential issues arising from excessive data storage.
+        // TooManyUnjudgedIdentities,
     }
 
     #[pallet::event]
@@ -723,6 +762,13 @@ pub mod pallet {
 
             let judgements = id.judgements.len();
             <IdentityOf<T>>::insert(&sender, (id, username));
+            <UnjudgedIdentities<T>>::insert(&sender, ());
+            // <UnjudgedIdentities<T>>::try_mutate(|unjudged| -> Result<(), Error<T>> {
+            //     if !unjudged.contains(&sender) {
+            //         unjudged.try_push(sender.clone()).map_err(|_| Error::<T>::TooManyUnjudgedIdentities)?;
+            //     }
+            //     Ok(())
+            // })?;
 
             Self::deposit_event(Event::JudgementRequested {
                 who: sender,
@@ -932,6 +978,14 @@ pub mod pallet {
 
             let judgements = id.judgements.len();
             <IdentityOf<T>>::insert(&target, (id, username));
+            <UnjudgedIdentities<T>>::remove(&target);
+
+            // <UnjudgedIdentities<T>>::mutate(|unjudged| {
+            //     if let Some(pos) = unjudged.iter().position(|x| *x == target) {
+            //         unjudged.swap_remove(pos);
+            //     }
+            // });
+
             Self::deposit_event(Event::JudgementGiven {
                 target,
                 registrar_index: reg_index,
@@ -1365,46 +1419,6 @@ pub mod pallet {
         }
     }
 
-    /// Fetch all accounts with pending judgments.
-    ///
-    /// This extrinsic iterates through all entries in the `IdentityOf` storage map and filters
-    /// out accounts that have non-empty judgments.
-    ///
-    /// Emits a `PendingJudgmentsFetched` event with a vector of account IDs with pending judgments.
-    #[pallet::call_index(0)]
-    #[pallet::weight(10_000)]
-    pub fn fetch_all_pending_judgments(origin: OriginFor<T>) -> DispatchResult {
-        ensure_root(origin)?;
-
-        let pending_judgments: Vec<T::AccountId> = IdentityOf::<T>::iter()
-            .filter_map(|(account, (registration, _))| {
-                if registration.judgements.is_empty() {
-                    None
-                } else {
-                    Some(account)
-                }
-            })
-            .collect();
-
-        // ensure!(!pending_judgments.is_empty(), Error::<T>::NoPendingJudgments);
-        //
-        // Self::deposit_event(Event::PendingJudgmentsFetched(pending_judgments.clone()));
-
-        Ok(())
-    }
-
-
-    fn fetch_all_pending_judgments<T: pallet_identity::Config>() -> Vec<T::AccountId> {
-        IdentityOf::<T>::iter()
-            .filter_map(|(account, (registration, _))| {
-                if registration.judgements.is_empty() {
-                    None
-                } else {
-                    Some(account)
-                }
-            })
-            .collect()
-    }
 }
 
 impl<T: Config> Pallet<T> {
@@ -1443,7 +1457,8 @@ impl<T: Config> Pallet<T> {
         fields: <T::IdentityInformation as IdentityInformationProvider>::FieldsIdentifier,
     ) -> bool {
         IdentityOf::<T>::get(who).map_or(false, |(registration, _username)| {
-            (registration.info.has_identity(fields))
+            // (registration.info.has_identity(fields))
+            registration.info.has_identity(fields)
         })
     }
 

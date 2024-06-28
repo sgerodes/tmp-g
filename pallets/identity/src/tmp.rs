@@ -123,11 +123,12 @@ mod types;
 pub mod weights;
 
 type BalanceOf<T> =
-    <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<
     <T as frame_system::Config>::AccountId,
 >>::NegativeImbalance;
 type AccountIdLookupOf<T> = <<T as frame_system::Config>::Lookup as StaticLookup>::Source;
+
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -228,13 +229,14 @@ pub mod pallet {
                         RawOrigin::Root.into(),
                         T::Lookup::unlookup(account.clone()),
                     )
-                    .unwrap();
+                        .unwrap();
                 }
             }
         }
     }
 
     const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
+    // const MAX_UNJUDGED_IDENTITIES: u32 = 1000; // TODO move this value in the config
 
     #[pallet::pallet]
     #[pallet::storage_version(STORAGE_VERSION)]
@@ -257,7 +259,6 @@ pub mod pallet {
         OptionQuery,
     >;
 
-
     /// A map of account IDs that have requested a judgement but have not yet received one.
     ///
     /// This storage is used to keep track of all identities that are awaiting judgement from a registrar.
@@ -275,13 +276,27 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn unjudged_identities)]
     pub(super) type UnjudgedIdentities<T: Config> = StorageMap<_, Twox64Concat, T::AccountId, (), OptionQuery>;
+    // pub(super) type UnjudgedIdentities<T: Config> = StorageValue<
+    //     _,
+    //     BoundedVec<T::AccountId, ConstU32<MAX_UNJUDGED_IDENTITIES>>,
+    //     ValueQuery,
+    // >;
+    // pub(super) type UnjudgedIdentities<T: Config> = StorageValue<
+    //     _,
+    //     BoundedVec<
+    //         T::AccountId,
+    //         ConstU32<MAX_UNJUDGED_IDENTITIES>,
+    //     >,
+    //     ValueQuery,
+    // >;
+
 
     /// The super-identity of an alternative "sub" identity together with its name, within that
     /// context. If the account is not some other account's sub-identity, then just `None`.
     #[pallet::storage]
     #[pallet::getter(fn super_of)]
     pub(super) type SuperOf<T: Config> =
-        StorageMap<_, Blake2_128Concat, T::AccountId, (T::AccountId, Data), OptionQuery>;
+    StorageMap<_, Blake2_128Concat, T::AccountId, (T::AccountId, Data), OptionQuery>;
 
     /// Alternative "sub" identities of this account.
     ///
@@ -323,7 +338,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn authority)]
     pub(super) type UsernameAuthorities<T: Config> =
-        StorageMap<_, Twox64Concat, T::AccountId, AuthorityPropertiesOf<T>, OptionQuery>;
+    StorageMap<_, Twox64Concat, T::AccountId, AuthorityPropertiesOf<T>, OptionQuery>;
 
     /// Reverse lookup from `username` to the `AccountId` that has registered it. The value should
     /// be a key in the `IdentityOf` map, but it may not if the user has cleared their identity.
@@ -333,7 +348,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn username)]
     pub(super) type AccountOfUsername<T: Config> =
-        StorageMap<_, Blake2_128Concat, Username<T>, T::AccountId, OptionQuery>;
+    StorageMap<_, Blake2_128Concat, Username<T>, T::AccountId, OptionQuery>;
 
     /// Usernames that an authority has granted, but that the account controller has not confirmed
     /// that they want it. Used primarily in cases where the `AccountId` cannot provide a signature
@@ -405,6 +420,10 @@ pub mod pallet {
         NoUsername,
         /// The username cannot be forcefully removed because it can still be accepted.
         NotExpired,
+        // /// This error occurs when the list of unjudged identities reaches its maximum capacity,
+        // /// preventing the addition of new entries. The system enforces a limit to maintain optimal
+        // /// performance and prevent potential issues arising from excessive data storage.
+        // TooManyUnjudgedIdentities,
     }
 
     #[pallet::event]
@@ -594,8 +613,8 @@ pub mod pallet {
         // to 2 x T::MaxSubAccounts::get().
         #[pallet::call_index(2)]
         #[pallet::weight(T::WeightInfo::set_subs_old(T::MaxSubAccounts::get())
-			.saturating_add(T::WeightInfo::set_subs_new(subs.len() as u32))
-		)]
+        .saturating_add(T::WeightInfo::set_subs_new(subs.len() as u32))
+        )]
         pub fn set_subs(
             origin: OriginFor<T>,
             subs: Vec<(T::AccountId, Data)>,
@@ -646,7 +665,7 @@ pub mod pallet {
                     // S: New subs added
                     .saturating_add(T::WeightInfo::set_subs_new(new_subs as u32)),
             )
-            .into())
+                .into())
         }
 
         /// Clear an account's identity info and all sub-accounts and return all deposits.
@@ -689,7 +708,7 @@ pub mod pallet {
                 id.judgements.len() as u32,
                 sub_ids.len() as u32,
             ))
-            .into())
+                .into())
         }
 
         /// Request a judgement from a registrar.
@@ -744,6 +763,12 @@ pub mod pallet {
             let judgements = id.judgements.len();
             <IdentityOf<T>>::insert(&sender, (id, username));
             <UnjudgedIdentities<T>>::insert(&sender, ());
+            // <UnjudgedIdentities<T>>::try_mutate(|unjudged| -> Result<(), Error<T>> {
+            //     if !unjudged.contains(&sender) {
+            //         unjudged.try_push(sender.clone()).map_err(|_| Error::<T>::TooManyUnjudgedIdentities)?;
+            //     }
+            //     Ok(())
+            // })?;
 
             Self::deposit_event(Event::JudgementRequested {
                 who: sender,
@@ -941,7 +966,7 @@ pub mod pallet {
                             fee,
                             BalanceStatus::Free,
                         )
-                        .map_err(|_| Error::<T>::JudgementPaymentFailed)?;
+                            .map_err(|_| Error::<T>::JudgementPaymentFailed)?;
                     }
                     id.judgements[position] = item
                 }
@@ -954,6 +979,12 @@ pub mod pallet {
             let judgements = id.judgements.len();
             <IdentityOf<T>>::insert(&target, (id, username));
             <UnjudgedIdentities<T>>::remove(&target);
+
+            // <UnjudgedIdentities<T>>::mutate(|unjudged| {
+            //     if let Some(pos) = unjudged.iter().position(|x| *x == target) {
+            //         unjudged.swap_remove(pos);
+            //     }
+            // });
 
             Self::deposit_event(Event::JudgementGiven {
                 target,
@@ -1012,7 +1043,7 @@ pub mod pallet {
                 id.judgements.len() as u32,
                 sub_ids.len() as u32,
             ))
-            .into())
+                .into())
         }
 
         /// Add the given account to the sender's subs.
@@ -1387,6 +1418,7 @@ pub mod pallet {
             Ok(Some(T::WeightInfo::emit_identity_hash()).into())
         }
     }
+
 }
 
 impl<T: Config> Pallet<T> {
@@ -1425,6 +1457,7 @@ impl<T: Config> Pallet<T> {
         fields: <T::IdentityInformation as IdentityInformationProvider>::FieldsIdentifier,
     ) -> bool {
         IdentityOf::<T>::get(who).map_or(false, |(registration, _username)| {
+            // (registration.info.has_identity(fields))
             registration.info.has_identity(fields)
         })
     }

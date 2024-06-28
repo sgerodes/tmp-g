@@ -23,7 +23,8 @@ use scale_info::{
     Path, Type, TypeInfo,
 };
 use sp_runtime::{traits::Member, RuntimeDebug};
-use sp_std::{fmt::Debug, iter::once, ops::Add, prelude::*};
+// use sp_std::{fmt::Debug, iter::once, ops::Add, prelude::*};
+use sp_std::{fmt::Debug, iter::once, ops::Add};
 
 /// An identifier for a single name registrar/identity verification service.
 pub type RegistrarIndex = u32;

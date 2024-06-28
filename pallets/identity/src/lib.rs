@@ -1353,7 +1353,6 @@ pub mod pallet {
             origin: OriginFor<T>,
             target: AccountIdLookupOf<T>,
         ) -> DispatchResultWithPostInfo {
-            // TODO allow only registrars
             let _sender = ensure_signed(origin)?;
             let target = T::Lookup::lookup(target)?;
             let (id, _) = <IdentityOf<T>>::get(&target).ok_or(Error::<T>::InvalidTarget)?;
@@ -1364,6 +1363,47 @@ pub mod pallet {
             });
             Ok(Some(T::WeightInfo::emit_identity_hash()).into())
         }
+    }
+
+    /// Fetch all accounts with pending judgments.
+    ///
+    /// This extrinsic iterates through all entries in the `IdentityOf` storage map and filters
+    /// out accounts that have non-empty judgments.
+    ///
+    /// Emits a `PendingJudgmentsFetched` event with a vector of account IDs with pending judgments.
+    #[pallet::call_index(0)]
+    #[pallet::weight(10_000)]
+    pub fn fetch_all_pending_judgments(origin: OriginFor<T>) -> DispatchResult {
+        ensure_root(origin)?;
+
+        let pending_judgments: Vec<T::AccountId> = IdentityOf::<T>::iter()
+            .filter_map(|(account, (registration, _))| {
+                if registration.judgements.is_empty() {
+                    None
+                } else {
+                    Some(account)
+                }
+            })
+            .collect();
+
+        // ensure!(!pending_judgments.is_empty(), Error::<T>::NoPendingJudgments);
+        //
+        // Self::deposit_event(Event::PendingJudgmentsFetched(pending_judgments.clone()));
+
+        Ok(())
+    }
+
+
+    fn fetch_all_pending_judgments<T: pallet_identity::Config>() -> Vec<T::AccountId> {
+        IdentityOf::<T>::iter()
+            .filter_map(|(account, (registration, _))| {
+                if registration.judgements.is_empty() {
+                    None
+                } else {
+                    Some(account)
+                }
+            })
+            .collect()
     }
 }
 

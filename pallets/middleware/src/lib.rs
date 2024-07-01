@@ -7,6 +7,11 @@ mod benchmarking;
 pub mod weights;
 pub use weights::*;
 
+use sp_runtime::offchain::storage::StorageValueRef;
+use frame_system::pallet_prelude::*;
+use core::convert::TryInto;
+use sp_core::offchain::StorageKind;
+
 #[frame_support::pallet(dev_mode)]
 pub mod pallet {
     use super::*;
@@ -40,6 +45,16 @@ pub mod pallet {
     pub enum Error<T> {
         StringTooLong,
     }
+
+    // #[pallet::hooks]
+    // impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+    //     // #[cfg(feature = "experimental")]
+    //     fn offchain_worker(block_number: BlockNumberFor<T>) {
+    //         let block_number_u64: u64 = block_number.try_into().ok().unwrap_or_default();
+    //         println!("Current print block number: {:?}", block_number_u64);
+    //         log::debug!("Current log block number: {:?}", block_number_u64);
+    //     }
+    // }
 
     // #[pallet::hooks]
     // impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
